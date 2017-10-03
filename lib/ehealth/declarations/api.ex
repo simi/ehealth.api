@@ -18,11 +18,15 @@ defmodule EHealth.Declarations.API do
   def get_declarations(params, headers) do
     with {:ok, resp} <- OPS.get_declarations(params, headers),
          related_ids <- fetch_related_ids(Map.fetch!(resp, "data")),
-         {divisions, _} <- Divisions.get_divisions(%{ids: list_to_param(related_ids["division_ids"])}),
-         {employees, _} <- Employees.get_employees(%{ids: list_to_param(related_ids["employee_ids"])}),
-         {legals, _} <- LegalEntities.get_legal_entities(%{ids: list_to_param(related_ids["legal_entity_ids"])}),
-         {:ok, persons} <- MPI.all_search(%{ids: list_to_param(related_ids["person_ids"])}, headers),
-         relations <- build_indexes(divisions, employees, legals, persons["data"]),
+         division_ids <- list_to_param(related_ids["division_ids"]),
+         employee_ids <- list_to_param(related_ids["employee_ids"]),
+         legal_entity_ids <- list_to_param(related_ids["legal_entity_ids"]),
+         person_ids <- list_to_param(related_ids["person_ids"]),
+         %Page{} = divisions <- Divisions.get_divisions(%{ids: division_ids}),
+         %Page{} = employees <- Employees.get_employees(%{ids: employee_ids}),
+         %Page{} = legal_entities <- LegalEntities.get_legal_entities(%{ids: legal_entity_ids}),
+         {:ok, persons} <- preload_persons(person_ids, headers),
+         relations <- build_indexes(divisions.entries, employees.entries, legal_entities.entries, persons["data"]),
          prepared_data <- merge_related_data(resp["data"], relations),
          declarations <- render_declarations(prepared_data),
          response <- Map.put(resp, "data", declarations),
@@ -41,6 +45,9 @@ defmodule EHealth.Declarations.API do
     |> elem(1)
     |> Enum.into(%{})
   end
+
+  defp preload_persons([], _), do: {:ok, []}
+  defp preload_persons(ids, headers), do: MPI.all_search(%{ids: ids}, headers)
 
   defp put_related_id(list, id) do
     case Enum.member?(list, id) do
