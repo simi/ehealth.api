@@ -70,7 +70,8 @@
     "dispense_valid_from",
     "dispense_valid_to",
     "medication_id",
-    "medication_qty"
+    "medication_qty",
+    "medical_program_id"
   ],
   "additionalProperties": false
 }
