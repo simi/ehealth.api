@@ -1,0 +1,91 @@
+defmodule Mithril.Mixfile do
+  use Mix.Project
+
+  @version "0.1.110"
+
+  def project do
+    [
+      app: :mithril,
+      version: @version,
+      package: package(),
+      build_path: "../../_build",
+      config_path: "../../config/config.exs",
+      deps_path: "../../deps",
+      lockfile: "../../mix.lock",
+      elixir: "~> 1.5",
+      elixirc_paths: elixirc_paths(Mix.env),
+      compilers: [:phoenix] ++ Mix.compilers,
+      build_embedded: Mix.env == :prod,
+      start_permanent: Mix.env == :prod,
+      aliases: aliases(),
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [coveralls: :test],
+      docs: [source_ref: "v#\{@version\}", main: "readme", extras: ["README.md"]]
+    ]
+  end
+
+  # Run "mix help compile.app" to learn about applications.
+  def application do
+    [
+      extra_applications: [:logger, :logger_json, :confex, :runtime_tools,
+                            :ecto, :postgrex,
+                            :cowboy, :httpoison, :poison,
+                            :phoenix, :phoenix_ecto, :eview],
+      mod: {Mithril, []}
+    ]
+  end
+
+  # Specifies which paths to compile per environment.
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_),     do: ["lib"]
+
+  # Run "mix help deps" to learn about dependencies.
+  defp deps do
+    [
+      {:distillery, "~> 1.2"},
+      {:confex, "~> 3.2"},
+      {:ecto, "~> 2.1"},
+      {:postgrex, "~> 0.13.2"},
+      {:cowboy, "~> 1.1"},
+      {:httpoison, "~> 0.13.0"},
+      {:poison, "~> 3.1"},
+      {:phoenix, "~> 1.3.0-rc"},
+      {:logger_json, "~> 0.5.0"},
+      {:eview, "~> 0.11"},
+      {:phoenix_ecto, "~> 3.2"},
+      {:ecto_paging, ">= 0.0.0"},
+      {:comeonin, "~> 4.0.3"},
+      {:bcrypt_elixir, "~> 1.0"},
+      {:secure_random, ">= 0.0.0"},
+      {:benchfella, ">= 0.3.4", only: [:dev, :test]},
+      {:ex_doc, ">= 0.15.0", only: [:dev, :test]},
+      {:excoveralls, ">= 0.5.0", only: [:dev, :test]},
+      {:dogma, ">= 0.1.12", only: [:dev, :test]},
+      {:credo, ">= 0.5.1", only: [:dev, :test]}
+    ]
+  end
+
+  # Settings for publishing in Hex package manager:
+  defp package do
+    [contributors: ["Nebo #15"],
+     maintainers: ["Nebo #15"],
+     licenses: ["LISENSE.md"],
+     links: %{github: "https://github.com/Nebo15/trump.api"},
+     files: ~w(lib LICENSE.md mix.exs README.md)]
+  end
+
+  # Aliases are shortcuts or tasks specific to the current project.
+  # For example, to create, migrate and run the seeds file at once:
+  #
+  #     $ mix ecto.setup
+  #
+  # See the documentation for `Mix` for more info on aliases.
+  defp aliases do
+    [
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      "test": ["ecto.drop", "ecto.create --quiet", "ecto.migrate", "test"]
+    ]
+  end
+end

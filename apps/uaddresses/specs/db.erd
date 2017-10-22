@@ -1,0 +1,46 @@
+[regions]
+id | UUID | NOT NULL
+koatuu | VARCHAR('10')
+name | VARCHAR('50') | NOT NULL
+
+[districts]
+id | UUID | NOT NULL
+koatuu | VARCHAR('10')
+region_id | UUID | NOT NULL
+name | VARCHAR('100') | NOT NULL
+
+[settlements]
+id | UUID | NOT NULL
+type | VARCHAR(50)
+koatuu | VARCHAR('10')
+name | VARCHAR | NOT NULL
+district_id | UUID
+region_id | UUID | NOT NULL
+mountain_group | VARCHAR(150)
+parent_settlement | UUID
+
+[streets]
+id | UUID | NOT NULL
+settlement_id | UUID | NOT NULL
+type | VARCHAR(10) | NOT NULL
+name | VARCHAR(150) | NOT NULL
+
+[streets_aliases]
+id | UUID | NOT NULL
+street_id | UUID | NOT NULL
+name | VARCHAR(150) | NOT NULL
+
+(UAdresses)
+regions
+districts
+settlements
+streets
+streets_aliases
+
+regions 1--+ districts
+regions 1--+ settlements
+districts 1--+ settlements
+settlements 1--+ streets
+regions 1--+ streets
+districts 1--+ streets
+streets 1--+ streets_aliases

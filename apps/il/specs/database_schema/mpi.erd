@@ -1,0 +1,53 @@
+[person]
+id | varchar | not null
+version | varchar | not null
+last_name | varchar | not null
+first_name | varchar | not null
+second_name | varchar
+birth_date | date | not null
+birth_country | varchar | not null
+birth_settlement | varchar | not null
+gender | varchar | not null
+email | varchar
+tax_id | varchar
+death_date | date
+is_active | boolean | not null
+documents | json | not null
+addresses | json | not null
+phones | json
+secret | varchar | not null
+emergency_contact | json | not null
+confidant_person | json
+patient_signed | boolean | not null
+process_disclosure_data_consent | boolean | not null
+authentication_methods | json | not null
+merged_ids  | varchar | not null
+status | varchar | not null
+inserted_at | timestamp | not null
+inserted_by | varchar | not null
+updated_at | timestamp | not null
+updated_by | varchar | not null
+authentication_methods | json
+
+[merge_candidates]
+id | varchar | not null
+person_id | varchar | not null
+master_person_id | varchar | not null
+status | varchar | not null
+inserted_at | timestamp | not null
+updated_at | timestamp | not null
+
+[audit_log]
+id | uuid | not null
+actor_id | uuid | not null
+resource | varchar | not null
+resource_id | varchar | not null
+changeset | jsonb | not null
+inserted_at | timestamp | not null
+
+(mpi_db)
+person
+merge_candidates
+audit_log
+
+person 1--* merge_candidates

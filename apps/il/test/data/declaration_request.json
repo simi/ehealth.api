@@ -1,0 +1,111 @@
+{
+  "declaration_request": {
+    "person": {
+      "first_name": "Олена",
+      "last_name": "Пчілка",
+      "second_name": "Миколайович",
+      "birth_date": "2010-08-19",
+      "birth_country": "Україна",
+      "birth_settlement": "Вінниця",
+      "gender": "MALE",
+      "email": "email@example.com",
+      "tax_id": "1111111118",
+      "secret": "secret",
+      "documents": [
+        {
+          "type": "PASSPORT",
+          "number": "120518"
+        }
+      ],
+      "addresses": [
+        {
+          "type": "REGISTRATION",
+          "country": "UA",
+          "area": "М.КИЇВ",
+          "region": "Бердичівський",
+          "settlement": "Київ",
+          "settlement_type": "CITY",
+          "settlement_id": "adaa4abf-f530-461c-bcbf-a0ac210d955b",
+          "street_type": "STREET",
+          "street": "вул. Ніжинська",
+          "building": "15",
+          "apartment": "23",
+          "zip": "02090"
+        },
+        {
+          "type": "RESIDENCE",
+          "country": "UA",
+          "area": "М.КИЇВ",
+          "region": "Бердичівський",
+          "settlement": "Київ",
+          "settlement_type": "CITY",
+          "settlement_id": "adaa4abf-f530-461c-bcbf-a0ac210d955b",
+          "street_type": "STREET",
+          "street": "вул. Ніжинська",
+          "building": "15",
+          "apartment": "23",
+          "zip": "02090"
+        }
+      ],
+      "phones": [
+        {
+          "type": "MOBILE",
+          "number": "+380508887700"
+        }
+      ],
+      "authentication_methods": [
+        {
+          "type": "OTP",
+          "phone_number": "+380508887700"
+        }
+      ],
+      "emergency_contact": {
+        "first_name": "Петро",
+        "last_name": "Іванов",
+        "second_name": "Миколайович",
+        "phones": [
+          {
+            "type": "MOBILE",
+            "number": "+380503410870"
+          }
+        ]
+      },
+      "confidant_person": [{
+        "relation_type": "PRIMARY",
+        "first_name": "Петро",
+        "last_name": "Іванов",
+        "second_name": "Миколайович",
+        "birth_date": "1991-08-19",
+        "birth_country": "Україна",
+        "birth_settlement": "Вінниця",
+        "gender": "MALE",
+        "tax_id": "2222222225",
+        "documents_person": [
+          {
+            "type": "PASSPORT",
+            "number": "120518"
+          }
+        ],
+        "documents_relationship": [
+          {
+            "type": "COURT_DECISION",
+            "number": "120518"
+          }
+        ],
+        "phones": [
+          {
+            "type": "MOBILE",
+            "number": "+380503410870"
+          }
+        ],
+        "secret": "some_secret"
+      }],
+      "patient_signed": false,
+      "process_disclosure_data_consent": true
+    },
+    "scope": "family_doctor",
+    "employee_id": "ce377dea-d8c4-4dd8-9328-de24b1ee3879",
+    "division_id": "51f56b0e-0223-49c1-9b5f-b07e09ba40f1",
+    "seed": "99bc78ba577a95a11f1a344d4d2ae55f2f857b98"
+  }
+}

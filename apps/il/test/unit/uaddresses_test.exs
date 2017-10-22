@@ -1,0 +1,12 @@
+defmodule Il.Unit.AddressesTest do
+  @moduledoc false
+
+  use ExUnit.Case
+  alias Il.Divisions.UAddress
+
+  test "check update_required?/2" do
+    data = %{"mountain_group" => "yep"}
+    settlement = %{"id" => "123", "mountain_group" => "no"}
+    assert UAddress.update_required?(data, settlement)
+  end
+end
