@@ -12,7 +12,7 @@ defmodule EHealth.MedicationRequestRequests do
   alias EHealth.Repo
   alias EHealth.PRMRepo
   alias EHealth.API.OPS
-  alias EHealth.PRM.Employees
+  alias EHealth.Employees
   alias EHealth.PRM.MedicalPrograms
   alias EHealth.MedicationRequestRequest
   alias EHealth.MedicationRequests.SMSSender
@@ -82,7 +82,7 @@ defmodule EHealth.MedicationRequestRequests do
   defp get_employee_ids_from_headers(headers) do
     headers
     |> get_consumer_id()
-    |> Employees.get_employee_by_user_id()
+    |> Employees.get_by_user_id()
     |> Enum.filter(fn e -> e.legal_entity_id == get_client_id(headers) end)
     |> Enum.map(fn e -> e.id end)
   end

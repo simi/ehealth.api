@@ -3,7 +3,7 @@ defmodule EHealth.Man.Templates.EmployeeRequestInvitation do
 
   use Confex, otp_app: :ehealth
   alias EHealth.API.Man
-  alias EHealth.Employee.Request
+  alias EHealth.EmployeeRequests.EmployeeRequest, as: Request
   alias EHealth.Dictionaries
   alias EHealth.Utils.AddressMerger
   alias EHealth.PRM.LegalEntities

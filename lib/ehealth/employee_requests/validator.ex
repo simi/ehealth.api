@@ -1,11 +1,11 @@
-defmodule EHealth.Employee.Validator do
+defmodule EHealth.EmployeeRequests.Validator do
   @moduledoc """
   Request and Tax ID validators
   """
 
   alias EHealth.Validators.TaxID
   alias EHealth.Validators.BirthDate
-  alias EHealth.PRM.Employees.Schema, as: Employee
+  alias EHealth.Employees.Employee
   alias EHealth.Validators.JsonSchema
   alias EHealth.Validators.JsonObjects
   alias EHealth.Dictionaries

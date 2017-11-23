@@ -3,7 +3,7 @@ defmodule EHealth.Declarations.View do
 
   use EHealth.Web, :view
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
-  alias EHealth.PRM.Employees.Schema, as: Employee
+  alias EHealth.Employees.Employee
   alias EHealth.Parties.Party
   alias EHealth.Divisions.Division
 

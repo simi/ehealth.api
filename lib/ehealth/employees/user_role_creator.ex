@@ -1,4 +1,4 @@
-defmodule EHealth.Employee.UserRoleCreator do
+defmodule EHealth.Employees.UserRoleCreator do
   @moduledoc """
   Creates or updates user roles in Mithril
   """
@@ -6,7 +6,7 @@ defmodule EHealth.Employee.UserRoleCreator do
   alias EHealth.API.Mithril
   alias EHealth.PartyUsers
   alias EHealth.PartyUsers.PartyUser
-  alias EHealth.PRM.Employees.Schema, as: Employee
+  alias EHealth.Employees.Employee
 
   require Logger
 

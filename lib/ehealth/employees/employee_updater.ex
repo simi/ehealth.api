@@ -1,4 +1,4 @@
-defmodule EHealth.Employee.EmployeeUpdater do
+defmodule EHealth.Employees.EmployeeUpdater do
   @moduledoc false
 
   import EHealth.Utils.Connection, only: [get_consumer_id: 1]
@@ -6,8 +6,8 @@ defmodule EHealth.Employee.EmployeeUpdater do
   alias EHealth.API.OPS
   alias EHealth.API.Mithril
   alias EHealth.PartyUsers
-  alias EHealth.PRM.Employees
-  alias EHealth.PRM.Employees.Schema, as: Employee
+  alias EHealth.Employees
+  alias EHealth.Employees.Employee
   alias EHealth.PRMRepo
   import Ecto.Query
 
@@ -21,7 +21,7 @@ defmodule EHealth.Employee.EmployeeUpdater do
 
   def deactivate(%{"id" => id} = params, headers, with_owner \\ false) do
     legal_entity_id = Map.get(params, "legal_entity_id")
-    with employee <- Employees.get_employee_by_id!(id),
+    with employee <- Employees.get_by_id!(id),
          :ok <- check_legal_entity_id(legal_entity_id, employee),
          :ok <- check_transition(employee, with_owner),
          active_employees <- get_active_employees(employee),
@@ -109,7 +109,7 @@ defmodule EHealth.Employee.EmployeeUpdater do
       headers
       |> get_update_employee_params()
       |> put_employee_status(employee)
-    Employees.update_employee(employee, params, get_consumer_id(headers))
+    Employees.update(employee, params, get_consumer_id(headers))
   end
 
   defp get_update_employee_params(headers) do

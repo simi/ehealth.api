@@ -13,11 +13,11 @@ defmodule EHealth.LegalEntity.API do
   alias EHealth.API.MediaStorage
   alias EHealth.OAuth.API, as: OAuth
   alias EHealth.LegalEntity.Validator
-  alias EHealth.Employee.API
+  alias EHealth.EmployeeRequests
   alias EHealth.API.Mithril
   alias EHealth.PRM.LegalEntities
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
-  alias EHealth.PRM.Employees.Schema, as: Employee
+  alias EHealth.Employees.Employee
   alias Ecto.Schema.Metadata
 
   require Logger
@@ -216,7 +216,7 @@ defmodule EHealth.LegalEntity.API do
     id
     |> prepare_employee_request_data(party)
     |> put_in(["employee_request", "employee_type"], employee_type)
-    |> API.create_employee_request(true)
+    |> EmployeeRequests.create(true)
   end
 
   def prepare_employee_request_data(legal_entity_id, party) do

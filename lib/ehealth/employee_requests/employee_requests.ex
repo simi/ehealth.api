@@ -1,31 +1,30 @@
-defmodule EHealth.Employee.API do
+defmodule EHealth.EmployeeRequests do
   @moduledoc false
 
-  import Ecto.{Query, Changeset}, warn: false
+  import Ecto.Query
+  import Ecto.Changeset
   import EHealth.Utils.Connection
-  import EHealth.LegalEntity.API, only: [get_client_type_name: 2]
-  import EHealth.Plugs.ClientContext, only: [authorize_legal_entity_id: 3]
 
+  alias EHealth.EmployeeRequests.EmployeeRequest, as: Request
   alias EHealth.Repo
-  alias EHealth.Employee.Request
+  alias EHealth.PRMRepo
+  alias EHealth.Employees.Employee
+  alias EHealth.Divisions.Division
+  alias EHealth.PRM.LegalEntities
+  alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
+  alias EHealth.EmployeeRequests.Validator
   alias EHealth.OAuth.API, as: OAuth
   alias EHealth.Employee.UserCreateRequest
-  alias EHealth.Employee.EmployeeCreator
-  alias EHealth.Employee.UserRoleCreator
   alias EHealth.Man.Templates.EmployeeRequestInvitation, as: EmployeeRequestInvitationTemplate
   alias EHealth.Bamboo.Emails.EmployeeRequestInvitation, as: EmployeeRequestInvitationEmail
   alias EHealth.Man.Templates.EmployeeCreatedNotification, as: EmployeeCreatedNotificationTemplate
   alias EHealth.Bamboo.Emails.EmployeeCreatedNotification, as: EmployeeCreatedNotificationEmail
   alias EHealth.API.Mithril
-  alias EHealth.Employee.Validator
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
-  alias EHealth.PRM.Employees.Schema, as: Employee
-  alias EHealth.Divisions.Division
-  alias EHealth.PRMRepo
-  alias EHealth.PRM.Employees
-  alias EHealth.Parties
   alias EHealth.PRM.LegalEntities
+  alias EHealth.Employees
   alias EHealth.PRM.BlackListUsers
+  alias Ecto.Multi
 
   require Logger
 
@@ -35,17 +34,10 @@ defmodule EHealth.Employee.API do
   @status_expired Request.status(:expired)
 
   @employee_status_dismissed Employee.status(:dismissed)
-
-  @doctor Employee.type(:doctor)
   @owner Employee.type(:owner)
-  @pharmacist Employee.type(:pharmacist)
   @pharmacy_owner Employee.type(:pharmacy_owner)
 
-  def get_employee_request_by_id!(id) do
-    Repo.get!(Request, id)
-  end
-
-  def list_employee_requests(params) do
+  def list(params) do
     query = from er in Request,
       order_by: [desc: :inserted_at]
 
@@ -70,22 +62,11 @@ defmodule EHealth.Employee.API do
     {paging, %{"legal_entities" => legal_entities}}
   end
 
-  defp filter_by_legal_entity_id(query, %{"legal_entity_id" => legal_entity_id}) do
-    where(query, [r], fragment("?->>'legal_entity_id' = ?", r.data, ^legal_entity_id))
+  def get_by_id!(id) do
+    Repo.get!(Request, id)
   end
 
-  defp filter_by_legal_entity_id(query, _) do
-    query
-  end
-
-  defp filter_by_status(query, %{"status" => status}) when is_binary(status) do
-    where(query, [r], r.status == ^status)
-  end
-  defp filter_by_status(query, _) do
-    where(query, [r], r.status == @status_new)
-  end
-
-  def create_employee_request(attrs, allowed_owner \\ false) do
+  def create(attrs, allowed_owner \\ false) do
     with :ok <- Validator.validate(attrs),
          params <- Map.fetch!(attrs, "employee_request"),
          :ok <- check_owner(params, allowed_owner),
@@ -110,7 +91,7 @@ defmodule EHealth.Employee.API do
     %Request{data: data} =
       params
       |> Map.fetch!("id")
-      |> get_employee_request_by_id!()
+      |> get_by_id!()
 
     user_email =
       data
@@ -118,8 +99,27 @@ defmodule EHealth.Employee.API do
       |> Map.fetch!("email")
 
     %UserCreateRequest{}
-    |> user_employee_request_changeset(params)
+    |> changeset(params)
     |> OAuth.create_user(user_email, headers)
+  end
+
+  def reject(id) do
+    with employee_request <- get_by_id!(id),
+         {:ok, employee_request} <- check_transition_status(employee_request)
+    do
+      update_status(employee_request, @status_rejected)
+    end
+  end
+
+  def approve(id, headers) do
+    employee_request = get_by_id!(id)
+
+    with {:ok, employee_request} <- check_transition_status(employee_request),
+         {:ok, employee} <- Employees.create_or_update_employee(employee_request, headers),
+         {:ok, employee_request} <- update_status(employee_request, employee, @status_approved)
+    do
+      send_email(employee_request, EmployeeCreatedNotificationTemplate, EmployeeCreatedNotificationEmail)
+    end
   end
 
   def send_email(%Request{data: data} = employee_request, template, sender) do
@@ -135,65 +135,6 @@ defmodule EHealth.Employee.API do
     end
   end
 
-  def reject_employee_request(id) do
-    with employee_request <- get_employee_request_by_id!(id),
-         {:ok, employee_request} <- check_transition_status(employee_request)
-    do
-      update_status(employee_request, @status_rejected)
-    end
-  end
-
-  def approve_employee_request(id, headers) do
-    employee_request = get_employee_request_by_id!(id)
-
-    with {:ok, employee_request} <- check_transition_status(employee_request),
-         {:ok, employee} <- create_or_update_employee(employee_request, headers),
-         {:ok, employee_request} <- update_status(employee_request, employee, @status_approved)
-    do
-      send_email(employee_request, EmployeeCreatedNotificationTemplate, EmployeeCreatedNotificationEmail)
-    end
-  end
-
-  def create_or_update_employee(%Request{data: %{"employee_id" => employee_id} = employee_request}, req_headers) do
-    with employee <- Employees.get_employee_by_id!(employee_id),
-         party_id <- employee |> Map.get(:party, %{}) |> Map.get(:id),
-         party <- Parties.get_by_id!(party_id),
-         {:ok, _} <- EmployeeCreator.create_party_user(party, req_headers),
-         {:ok, _} <- Parties.update(party, Map.fetch!(employee_request, "party"), employee_id),
-         params <- employee_request
-           |> update_additional_info(employee)
-           |> Map.put("employee_type", employee.employee_type)
-           |> Map.put("updated_by", get_consumer_id(req_headers))
-    do
-      Employees.update_employee(employee, params, get_consumer_id(req_headers))
-    end
-  end
-  def create_or_update_employee(%Request{} = employee_request, req_headers) do
-    with {:ok, employee} <- EmployeeCreator.create(employee_request, req_headers),
-         :ok <- UserRoleCreator.create(employee, req_headers)
-    do
-      {:ok, employee}
-    end
-  end
-
-  defp update_additional_info(employee_request, %Employee{employee_type: @doctor, additional_info: info}) do
-    Map.put(employee_request, "doctor", Map.merge(info, Map.get(employee_request, "doctor")))
-  end
-  defp update_additional_info(employee_request, %Employee{employee_type: @pharmacist, additional_info: info}) do
-    Map.put(employee_request, "pharmacist", Map.merge(info, Map.get(employee_request, "pharmacist")))
-  end
-  defp update_additional_info(employee_request, _), do: employee_request
-
-  def check_transition_status(%Request{status: @status_new} = employee_request) do
-    {:ok, employee_request}
-  end
-  def check_transition_status(%Request{status: @status_expired}) do
-    {:error, {:forbidden, "Employee request is expired"}}
-  end
-  def check_transition_status(%Request{status: status}) do
-    {:conflict, "Employee request status is #{status} and cannot be updated"}
-  end
-
   def update_status(%Request{} = employee_request, %Employee{id: id}, status) do
     employee_request
     |> changeset(%{status: status, employee_id: id})
@@ -205,7 +146,35 @@ defmodule EHealth.Employee.API do
     |> Repo.update()
   end
 
-  def changeset(%Request{} = schema, attrs) do
+  def update_all(query, updates) do
+    Multi.new
+    |> Multi.update_all(:employee_requests, query, set: updates)
+    |> Repo.transaction()
+  end
+
+  defp filter_by_legal_entity_id(query, %{"legal_entity_id" => legal_entity_id}) do
+    where(query, [r], fragment("?->>'legal_entity_id' = ?", r.data, ^legal_entity_id))
+  end
+  defp filter_by_legal_entity_id(query, _), do: query
+
+  defp filter_by_status(query, %{"status" => status}) when is_binary(status) do
+    where(query, [r], r.status == ^status)
+  end
+  defp filter_by_status(query, _) do
+    where(query, [r], r.status == @status_new)
+  end
+
+  def check_transition_status(%Request{status: @status_new} = employee_request) do
+    {:ok, employee_request}
+  end
+  def check_transition_status(%Request{status: @status_expired}) do
+    {:error, {:forbidden, "Employee request is expired"}}
+  end
+  def check_transition_status(%Request{status: status}) do
+    {:conflict, "Employee request status is #{status} and cannot be updated"}
+  end
+
+  defp changeset(%Request{} = schema, attrs) do
     fields = ~W(
       data
       status
@@ -221,16 +190,7 @@ defmodule EHealth.Employee.API do
     |> validate_data_field(Division, :division_id, get_in(attrs, [:data, "division_id"]))
     |> validate_data_field(Employee, :employee_id, get_in(attrs, [:data, "employee_id"]))
   end
-
-  defp validate_data_field(changeset, _, _, nil), do: changeset
-  defp validate_data_field(changeset, entity, key, id) do
-    case PRMRepo.get(entity, id) do
-      nil -> add_error(changeset, key, "does not exist")
-      _ -> changeset
-    end
-  end
-
-  def user_employee_request_changeset(%UserCreateRequest{} = schema, attrs) do
+  defp changeset(%UserCreateRequest{} = schema, attrs) do
     fields = ~W(
       password
     )a
@@ -238,6 +198,14 @@ defmodule EHealth.Employee.API do
     schema
     |> cast(attrs, fields)
     |> validate_required(fields)
+  end
+
+  defp validate_data_field(changeset, _, _, nil), do: changeset
+  defp validate_data_field(changeset, entity, key, id) do
+    case PRMRepo.get(entity, id) do
+      nil -> add_error(changeset, key, "does not exist")
+      _ -> changeset
+    end
   end
 
   def check_employee_request(headers, id) do
@@ -258,7 +226,7 @@ defmodule EHealth.Employee.API do
   defp fetch_user_email({:error, _reason}), do: nil
 
   defp match_employee_request(user_email, id) do
-    with %Request{data: data} <- get_employee_request_by_id!(id) do
+    with %Request{data: data} <- get_by_id!(id) do
       email = get_in(data, ["party", "email"])
       case user_email == email do
         true -> :ok
@@ -267,27 +235,8 @@ defmodule EHealth.Employee.API do
     end
   end
 
-  def get_employees(params) do
-    params
-    |> Map.put("is_active", true)
-    |> Employees.get_employees()
-  end
-
-  def get_employee_by_id(id, headers) do
-    client_id = get_client_id(headers)
-    with employee <- Employees.get_employee_by_id!(id),
-         {:ok, client_type} <- get_client_type_name(client_id, headers),
-         :ok <- authorize_legal_entity_id(employee.legal_entity_id, client_id, client_type)
-    do
-      {:ok, employee
-            |> PRMRepo.preload(:party)
-            |> PRMRepo.preload(:division)
-            |> PRMRepo.preload(:legal_entity)}
-    end
-  end
-
   defp insert_employee_request(%{"employee_id" => employee_id} = params) do
-    employee = Employees.get_employee_by_id(employee_id)
+    employee = Employees.get_by_id(employee_id)
     if is_nil(employee) do
       {:error, [
         {

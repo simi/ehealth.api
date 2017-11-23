@@ -3,10 +3,10 @@ defmodule EHealth.MedicationRequests.API do
 
   alias EHealth.API.OPS
   alias EHealth.PartyUsers
-  alias EHealth.PRM.Employees
+  alias EHealth.Employees
   alias EHealth.Divisions.Division
   alias EHealth.PartyUsers.PartyUser
-  alias EHealth.PRM.Employees.Schema, as: Employee
+  alias EHealth.Employees.Employee
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
   alias EHealth.PRM.MedicalPrograms.Schema, as: MedicalProgram
   alias EHealth.PRM.Medications.INNMDosage.Schema, as: INNMDosage
@@ -16,7 +16,6 @@ defmodule EHealth.MedicationRequests.API do
   alias EHealth.PRM.Medications.INNMDosage.Ingredient, as: INNMDosageIngredient
   alias EHealth.PRM.LegalEntities
   alias EHealth.Divisions
-  alias EHealth.PRM.Employees
   alias EHealth.PRM.MedicalPrograms
   alias EHealth.API.MPI
   alias EHealth.Validators.JsonSchema
@@ -196,7 +195,7 @@ defmodule EHealth.MedicationRequests.API do
 
   defp do_get_employees(params) do
     params
-    |> Employees.list()
+    |> Employees.list!()
     |> Enum.map(&(Map.get(&1, :id)))
   end
 
@@ -212,7 +211,7 @@ defmodule EHealth.MedicationRequests.API do
 
   def get_references(medication_request) do
     with %Division{} = division <- Divisions.get_by_id(medication_request["division_id"]),
-         %Employee{} = employee <- Employees.get_employee_by_id(medication_request["employee_id"]),
+         %Employee{} = employee <- Employees.get_by_id(medication_request["employee_id"]),
          %MedicalProgram{} = medical_program <- MedicalPrograms.get_by_id(medication_request["medical_program_id"]),
          %INNMDosage{} = medication <- MedicationsAPI.get_innm_dosage_by_id(medication_request["medication_id"]),
          %LegalEntity{} = legal_entity <- LegalEntities.get_legal_entity_by_id(medication_request["legal_entity_id"]),

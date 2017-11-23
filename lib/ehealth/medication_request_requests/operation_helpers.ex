@@ -2,7 +2,7 @@ defmodule EHealth.MedicationRequestRequest.OperationHelpers do
   @moduledoc false
   import Ecto.Changeset
 
-  alias EHealth.PRM.Employees
+  alias EHealth.Employees
   alias EHealth.PRM.LegalEntities
   alias EHealth.Divisions
   alias EHealth.MedicationRequestRequest.Validations
@@ -13,7 +13,7 @@ defmodule EHealth.MedicationRequestRequest.OperationHelpers do
   alias EHealth.PRM.MedicalPrograms
 
   def get_employee(id) do
-    Helpers.get_assoc_by_func("employee_id", fn -> Employees.get_employee_by_id(id) end)
+    Helpers.get_assoc_by_func("employee_id", fn -> Employees.get_by_id(id) end)
   end
 
   def get_medication(id) do

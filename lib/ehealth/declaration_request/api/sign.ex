@@ -8,7 +8,7 @@ defmodule EHealth.DeclarationRequest.API.Sign do
   alias EHealth.API.OPS
   alias EHealth.DeclarationRequest
   alias EHealth.DeclarationRequest.API
-  alias EHealth.PRM.Employees
+  alias EHealth.Employees
   alias EHealth.PartyUsers
   alias EHealth.PartyUsers.PartyUser
 
@@ -93,7 +93,7 @@ defmodule EHealth.DeclarationRequest.API.Sign do
   defp check_employees(%PartyUser{party_id: party_id}, employee_id) do
     employee =
       %{party_id: party_id, is_active: true}
-      |> Employees.get_employees()
+      |> Employees.list()
       |> Map.get(:entries)
       |> find_employee(employee_id)
     case employee do

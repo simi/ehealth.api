@@ -10,9 +10,9 @@ defmodule EHealth.DeclarationRequest.API do
   alias EHealth.PRM.GlobalParameters
   alias EHealth.PRM.LegalEntities
   alias EHealth.Divisions
-  alias EHealth.PRM.Employees
+  alias EHealth.Employees
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
-  alias EHealth.PRM.Employees.Schema, as: Employee
+  alias EHealth.Employees.Employee
   alias EHealth.Divisions.Division
   alias EHealth.DeclarationRequest
   alias EHealth.DeclarationRequest.API.Create
@@ -95,7 +95,7 @@ defmodule EHealth.DeclarationRequest.API do
          :ok <- Validations.validate_person(Map.get(attrs, "person")),
          {:ok, _} <- Validations.validate_addresses(get_in(attrs, ["person", "addresses"])),
          {:ok, %Employee{} = employee} <- Helpers.get_assoc_by_func("employee_id",
-                                            fn -> Employees.get_employee_by_id(attrs["employee_id"]) end),
+                                            fn -> Employees.get_by_id(attrs["employee_id"]) end),
          %LegalEntity{} = legal_entity <- LegalEntities.get_by_id_preload(
            client_id,
            :medical_service_provider

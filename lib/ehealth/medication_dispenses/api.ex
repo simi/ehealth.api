@@ -5,11 +5,11 @@ defmodule EHealth.MedicationDispense.API do
   import Ecto.Changeset, only: [cast: 3]
   import Ecto.Query
   alias EHealth.Divisions
-  alias EHealth.PRM.Employees
+  alias EHealth.Employees
   alias EHealth.PRM.LegalEntities
   alias EHealth.PRM.MedicalPrograms
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
-  alias EHealth.PRM.Employees.Schema, as: Employee
+  alias EHealth.Employees.Employee
   alias EHealth.Divisions.Division
   alias EHealth.PartyUsers.PartyUser
   alias EHealth.Parties.Party
@@ -189,7 +189,7 @@ defmodule EHealth.MedicationDispense.API do
   end
 
   defp validate_employee(%PartyUser{party: %Party{id: party_id}}, legal_entity_id) do
-    employees = Employees.list(party_id: party_id)
+    employees = Employees.list(%{party_id: party_id})
     Enum.reduce_while(employees, {:error, :forbidden}, fn employee, acc ->
       if is_active_employee(employee) && employee.legal_entity_id == legal_entity_id do
         {:halt, :ok}

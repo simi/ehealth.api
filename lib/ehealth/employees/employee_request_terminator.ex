@@ -6,10 +6,10 @@ defmodule EHealth.EmployeeRequest.Terminator do
 
   use GenServer
 
-  import EHealth.PRM.Employees, only: [update_all: 2]
+  import EHealth.EmployeeRequests, only: [update_all: 2]
   import Ecto.Query
 
-  alias EHealth.Employee.Request
+  alias EHealth.EmployeeRequests.EmployeeRequest, as: Request
   alias EHealth.PRM.GlobalParameters
 
   # Client API

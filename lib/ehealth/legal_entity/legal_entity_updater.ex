@@ -4,10 +4,10 @@ defmodule EHealth.LegalEntity.LegalEntityUpdater do
   import EHealth.Utils.Connection, only: [get_consumer_id: 1]
 
   alias EHealth.PRM.LegalEntities
-  alias EHealth.Employee.EmployeeUpdater
+  alias EHealth.Employees.EmployeeUpdater
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
-  alias EHealth.PRM.Employees.Schema, as: Employee
-  alias EHealth.PRM.Employees
+  alias EHealth.Employees.Employee
+  alias EHealth.Employees
 
   require Logger
 
@@ -31,11 +31,11 @@ defmodule EHealth.LegalEntity.LegalEntityUpdater do
   end
 
   def deactivate_employees(%LegalEntity{} = legal_entity, headers) do
-    [
+    %{
       status: @employee_status_approved,
       is_active: true,
       legal_entity_id: legal_entity.id,
-    ]
+    }
     |> Employees.list
     |> Enum.map(&(Task.async(fn ->
       id = Map.get(&1, :id)

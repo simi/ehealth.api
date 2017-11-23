@@ -2,9 +2,9 @@ defmodule EHealth.MedicationRequestRequest.Validations do
   @moduledoc false
 
   alias EHealth.API.Signature
-  alias EHealth.PRM.Employees
+  alias EHealth.Employees
   alias EHealth.Validators.JsonSchema
-  alias EHealth.PRM.Employees.Schema, as: Employee
+  alias EHealth.Employees.Employee
   alias EHealth.Declarations.API, as: DeclarationsAPI
   alias EHealth.PRM.Medications.API, as: MedicationsAPI
 
@@ -90,7 +90,7 @@ defmodule EHealth.MedicationRequestRequest.Validations do
   end
 
   def validate_sign_content(mrr, %{"content" => content, "signer" => signer}) do
-    with %Employee{} = employee <- Employees.get_employee_by_id(mrr.data.employee_id),
+    with %Employee{} = employee <- Employees.get_by_id(mrr.data.employee_id),
          doctor_tax_id          <- employee |> Map.get(:party) |> Map.get(:tax_id),
          true                   <- mrr.id == content["id"] &&
                                    mrr.data.division_id == get_in(content, ["division", "id"]) &&

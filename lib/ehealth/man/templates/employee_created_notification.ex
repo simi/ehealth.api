@@ -5,7 +5,7 @@ defmodule EHealth.Man.Templates.EmployeeCreatedNotification do
 
   alias EHealth.Man.Templates.EmployeeRequestInvitation
   alias EHealth.API.Man
-  alias EHealth.Employee.Request
+  alias EHealth.EmployeeRequests.EmployeeRequest, as: Request
   alias EHealth.PRM.LegalEntities
 
   def render(%Request{id: id, data: data}) do

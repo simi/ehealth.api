@@ -1,4 +1,4 @@
-defmodule EHealth.Employee.EmployeeCreator do
+defmodule EHealth.Employees.EmployeeCreator do
   @moduledoc """
   Creates new employee from valid employee request
   """
@@ -7,14 +7,14 @@ defmodule EHealth.Employee.EmployeeCreator do
   import Ecto.Query
 
   alias Scrivener.Page
-  alias EHealth.Employee.Request
-  alias EHealth.PRM.Employees
+  alias EHealth.EmployeeRequests.EmployeeRequest, as: Request
+  alias EHealth.Employees
   alias EHealth.Parties.Party
-  alias EHealth.PRM.Employees.Schema, as: Employee
+  alias EHealth.Employees.Employee
   alias EHealth.PartyUsers.PartyUser
   alias EHealth.Parties
   alias EHealth.PartyUsers
-  alias EHealth.Employee.EmployeeUpdater
+  alias EHealth.Employees.EmployeeUpdater
   alias EHealth.PRMRepo
 
   require Logger
@@ -93,7 +93,7 @@ defmodule EHealth.Employee.EmployeeCreator do
     data
     |> Map.merge(employee_request)
     |> put_inserted_by(req_headers)
-    |> Employees.create_employee(get_consumer_id(req_headers))
+    |> Employees.create(get_consumer_id(req_headers))
   end
   def create_employee(err, _, _), do: err
 
@@ -122,7 +122,7 @@ defmodule EHealth.Employee.EmployeeCreator do
     }
 
     with :ok <- EmployeeUpdater.revoke_user_auth_data(employee, headers) do
-      Employees.update_employee(employee, params, get_consumer_id(headers))
+      Employees.update(employee, params, get_consumer_id(headers))
     end
   end
   def deactivate_employee(employee, _), do: {:ok, employee}

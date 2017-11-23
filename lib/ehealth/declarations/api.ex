@@ -11,8 +11,8 @@ defmodule EHealth.Declarations.API do
   alias EHealth.API.Mithril
   alias EHealth.PRM.LegalEntities
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
-  alias EHealth.PRM.Employees
-  alias EHealth.PRM.Employees.Schema, as: Employee
+  alias EHealth.Employees
+  alias EHealth.Employees.Employee
   alias EHealth.Divisions
   alias EHealth.Divisions.Division
 
@@ -24,7 +24,7 @@ defmodule EHealth.Declarations.API do
          legal_entity_ids <- list_to_param(related_ids["legal_entity_ids"]),
          person_ids <- list_to_param(related_ids["person_ids"]),
          %Page{} = divisions <- Divisions.list(%{ids: division_ids}),
-         %Page{} = employees <- Employees.get_employees(%{ids: employee_ids}),
+         %Page{} = employees <- Employees.list(%{ids: employee_ids}),
          %Page{} = legal_entities <- LegalEntities.get_legal_entities(%{ids: legal_entity_ids}),
          {:ok, persons} <- preload_persons(person_ids, headers),
          relations <- build_indexes(divisions.entries, employees.entries, legal_entities.entries, persons["data"]),
@@ -125,7 +125,7 @@ defmodule EHealth.Declarations.API do
          person       <- load_relation(MPI, :person, declaration["person_id"], headers),
          legal_entity <- LegalEntities.get_legal_entity_by_id(legal_entity_id),
          division     <- Divisions.get_by_id(declaration["division_id"]),
-         employee     <- Employees.get_employee_by_id(declaration["employee_id"]),
+         employee     <- Employees.get_by_id(declaration["employee_id"]),
          declaration  <- merge_related_data(declaration, person, legal_entity, division, employee),
          response     <- render_declaration(declaration),
       do: {:ok, response}

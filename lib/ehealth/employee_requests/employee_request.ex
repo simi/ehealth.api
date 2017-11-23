@@ -1,4 +1,4 @@
-defmodule EHealth.Employee.Request do
+defmodule EHealth.EmployeeRequests.EmployeeRequest do
   @moduledoc false
 
   use Ecto.Schema

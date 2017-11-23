@@ -1,4 +1,4 @@
-defmodule EHealth.PRM.Employees.Schema do
+defmodule EHealth.Employees.Employee do
   @moduledoc false
 
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity

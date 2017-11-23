@@ -8,7 +8,7 @@ defmodule EHealth.Unit.LegalEntityTest do
   alias Ecto.UUID
   alias EHealth.Repo
   alias EHealth.PRMRepo
-  alias EHealth.Employee.Request, as: EmployeeRequest
+  alias EHealth.EmployeeRequests.EmployeeRequest
   alias EHealth.LegalEntity.API
   alias EHealth.LegalEntity.Validator
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity

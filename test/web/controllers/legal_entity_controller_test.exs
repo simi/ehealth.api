@@ -3,7 +3,7 @@ defmodule EHealth.Web.LegalEntityControllerTest do
 
   use EHealth.Web.ConnCase
   alias EHealth.MockServer
-  alias EHealth.PRM.Employees.Schema, as: Employee
+  alias EHealth.Employees.Employee
   alias EHealth.PRMRepo
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
 
