@@ -8,8 +8,8 @@ defmodule EHealth.PRM.BlackListUsers do
 
   alias Scrivener.Page
   alias EHealth.PRMRepo
-  alias EHealth.PRM.Parties
-  alias EHealth.PRM.Parties.Schema, as: Party
+  alias EHealth.Parties
+  alias EHealth.Parties.Party
   alias EHealth.API.Mithril
   alias EHealth.PRM.BlackListUsers.Search
   alias EHealth.PRM.BlackListUsers.Schema, as: BlackListUser

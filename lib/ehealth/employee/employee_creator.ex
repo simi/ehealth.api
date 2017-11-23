@@ -9,10 +9,10 @@ defmodule EHealth.Employee.EmployeeCreator do
   alias Scrivener.Page
   alias EHealth.Employee.Request
   alias EHealth.PRM.Employees
-  alias EHealth.PRM.Parties.Schema, as: Party
+  alias EHealth.Parties.Party
   alias EHealth.PRM.Employees.Schema, as: Employee
   alias EHealth.PRM.PartyUsers.Schema, as: PartyUser
-  alias EHealth.PRM.Parties
+  alias EHealth.Parties
   alias EHealth.PRM.PartyUsers
   alias EHealth.Employee.EmployeeUpdater
   alias EHealth.PRMRepo
@@ -28,7 +28,7 @@ defmodule EHealth.Employee.EmployeeCreator do
     search_params = %{tax_id: party["tax_id"], birth_date: party["birth_date"]}
     user_id = get_consumer_id(req_headers)
 
-    with %Page{} = paging <- Parties.list_parties(search_params),
+    with %Page{} = paging <- Parties.list(search_params),
          :ok <- check_party_user(user_id, paging.entries),
          {:ok, party} <- create_or_update_party(paging.entries, party, req_headers)
     do
@@ -50,7 +50,7 @@ defmodule EHealth.Employee.EmployeeCreator do
   def create_or_update_party([], data, req_headers) do
     with data <- put_inserted_by(data, req_headers),
          consumer_id = get_consumer_id(req_headers),
-         {:ok, party} <- Parties.create_party(data, consumer_id)
+         {:ok, party} <- Parties.create(data, consumer_id)
     do
       create_party_user(party, req_headers)
     end
@@ -62,7 +62,7 @@ defmodule EHealth.Employee.EmployeeCreator do
   def create_or_update_party([%Party{} = party], data, req_headers) do
     consumer_id = get_consumer_id(req_headers)
 
-    with {:ok, party} <- Parties.update_party(party, data, consumer_id) do
+    with {:ok, party} <- Parties.update(party, data, consumer_id) do
       create_party_user(party, req_headers)
     end
   end

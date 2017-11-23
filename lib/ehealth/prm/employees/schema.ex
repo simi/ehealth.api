@@ -3,7 +3,7 @@ defmodule EHealth.PRM.Employees.Schema do
 
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
   alias EHealth.Divisions.Division
-  alias EHealth.PRM.Parties.Schema, as: Party
+  alias EHealth.Parties.Party
 
   use Ecto.Schema
 

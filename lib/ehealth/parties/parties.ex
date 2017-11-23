@@ -1,4 +1,4 @@
-defmodule EHealth.PRM.Parties do
+defmodule EHealth.Parties do
   @moduledoc false
 
   use EHealth.PRM.Search
@@ -8,8 +8,8 @@ defmodule EHealth.PRM.Parties do
   alias EHealth.PRMRepo
   alias EHealth.PRM.Meta.Phone
   alias EHealth.PRM.Meta.Document
-  alias EHealth.PRM.Parties.Schema, as: Party
-  alias EHealth.PRM.Parties.Search
+  alias EHealth.Parties.Party
+  alias EHealth.Parties.Search
 
   # Party users
 
@@ -36,18 +36,22 @@ defmodule EHealth.PRM.Parties do
     updated_by
   )a
 
-  def list_parties(params) do
+  def list(params) do
     %Search{}
     |> changeset(params)
     |> search(params, Party)
   end
 
-  def get_party_by_id!(id) do
+  def get_by_id!(id) do
     Party
     |> where([p], p.id == ^id)
     |> join(:left, [p], u in assoc(p, :users))
     |> preload([p, u], [users: u])
     |> PRMRepo.one!
+  end
+
+  def get_by_id(id) do
+    PRMRepo.get(Party, id)
   end
 
   def get_by_ids(ids) do
@@ -64,7 +68,7 @@ defmodule EHealth.PRM.Parties do
     |> PRMRepo.all()
   end
 
-  def create_party(attrs, consumer_id) do
+  def create(attrs, consumer_id) do
     with {:ok, party} <-
       %Party{}
         |> changeset(attrs)
@@ -74,7 +78,7 @@ defmodule EHealth.PRM.Parties do
     end
   end
 
-  def update_party(%Party{} = party, attrs, consumer_id) do
+  def update(%Party{} = party, attrs, consumer_id) do
     with {:ok, party} <-
       party
         |> changeset(attrs)
@@ -87,7 +91,6 @@ defmodule EHealth.PRM.Parties do
   defp changeset(%Search{} = search, attrs) do
     cast(search, attrs, @search_fields)
   end
-
   defp changeset(%Party{} = party, attrs) do
     party
     |> cast(attrs, @fields_optional ++ @fields_required)

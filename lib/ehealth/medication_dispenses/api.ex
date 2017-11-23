@@ -12,7 +12,7 @@ defmodule EHealth.MedicationDispense.API do
   alias EHealth.PRM.Employees.Schema, as: Employee
   alias EHealth.Divisions.Division
   alias EHealth.PRM.PartyUsers.Schema, as: PartyUser
-  alias EHealth.PRM.Parties.Schema, as: Party
+  alias EHealth.Parties.Party
   alias EHealth.PRM.Medications.Medication.Schema, as: Medication
   alias EHealth.PRM.Medications.Program.Schema, as: ProgramMedication
   alias EHealth.API.OPS
@@ -21,7 +21,7 @@ defmodule EHealth.MedicationDispense.API do
   alias EHealth.Validators.JsonSchema
   alias EHealth.Validators.Reference
   alias EHealth.PRM.PartyUsers
-  alias EHealth.PRM.Parties
+  alias EHealth.Parties
   alias EHealth.PRMRepo
   alias EHealth.MedicationRequests.API, as: MedicationRequests
   alias EHealth.PRM.Medications.API, as: MedicationsAPI
@@ -491,7 +491,7 @@ defmodule EHealth.MedicationDispense.API do
   end
 
   defp get_party_by_id(id) do
-    with %Party{} = party <- PRMRepo.get(Party, id) do
+    with %Party{} = party <- Parties.get_by_id(id) do
       {:ok, party}
     else
       nil -> {:error, {:internal_error, "No party by id #{id}"}}

@@ -7,7 +7,7 @@ defmodule EHealth.PRM.PartyUsers.Schema do
   schema "party_users" do
     field :user_id, Ecto.UUID
 
-    belongs_to :party, EHealth.PRM.Parties.Schema, type: Ecto.UUID
+    belongs_to :party, EHealth.Parties.Party, type: Ecto.UUID
 
     timestamps()
   end

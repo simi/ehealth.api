@@ -10,7 +10,7 @@ defmodule EHealth.PRM.BlackListUsers.Schema do
     field :updated_by, Ecto.UUID
     field :inserted_by, Ecto.UUID
 
-    has_many :parties, EHealth.PRM.Parties.Schema, foreign_key: :tax_id, references: :tax_id
+    has_many :parties, EHealth.Parties.Party, foreign_key: :tax_id, references: :tax_id
 
     timestamps()
   end

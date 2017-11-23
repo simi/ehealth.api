@@ -6,7 +6,7 @@ defmodule EHealth.PRMFactories.PartyFactory do
       alias Ecto.UUID
 
       def party_factory do
-        %EHealth.PRM.Parties.Schema{
+        %EHealth.Parties.Party{
           birth_date: ~D[1991-08-19],
           documents: [
             %EHealth.PRM.Meta.Document{

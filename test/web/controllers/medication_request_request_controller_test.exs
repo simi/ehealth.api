@@ -373,7 +373,7 @@ defmodule EHealth.Web.MedicationRequestRequestControllerTest do
       drfo =
         mrr
         |> get_in(["employee", "party", "id"])
-        |> (fn x -> EHealth.PRMRepo.get!(EHealth.PRM.Parties.Schema, x) end).()
+        |> (fn x -> EHealth.PRMRepo.get!(EHealth.Parties.Party, x) end).()
         |> Map.get(:tax_id)
       conn = Plug.Conn.put_req_header(conn, "drfo", drfo)
 

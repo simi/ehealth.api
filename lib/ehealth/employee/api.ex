@@ -23,7 +23,7 @@ defmodule EHealth.Employee.API do
   alias EHealth.Divisions.Division
   alias EHealth.PRMRepo
   alias EHealth.PRM.Employees
-  alias EHealth.PRM.Parties
+  alias EHealth.Parties
   alias EHealth.PRM.LegalEntities
   alias EHealth.PRM.BlackListUsers
 
@@ -157,9 +157,9 @@ defmodule EHealth.Employee.API do
   def create_or_update_employee(%Request{data: %{"employee_id" => employee_id} = employee_request}, req_headers) do
     with employee <- Employees.get_employee_by_id!(employee_id),
          party_id <- employee |> Map.get(:party, %{}) |> Map.get(:id),
-         party <- Parties.get_party_by_id!(party_id),
+         party <- Parties.get_by_id!(party_id),
          {:ok, _} <- EmployeeCreator.create_party_user(party, req_headers),
-         {:ok, _} <- Parties.update_party(party, Map.fetch!(employee_request, "party"), employee_id),
+         {:ok, _} <- Parties.update(party, Map.fetch!(employee_request, "party"), employee_id),
          params <- employee_request
            |> update_additional_info(employee)
            |> Map.put("employee_type", employee.employee_type)
