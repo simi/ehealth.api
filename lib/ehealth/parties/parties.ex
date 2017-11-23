@@ -1,7 +1,7 @@
 defmodule EHealth.Parties do
   @moduledoc false
 
-  use EHealth.PRM.Search
+  use EHealth.Search, EHealth.PRMRepo
 
   import Ecto.{Query, Changeset}, warn: false
 

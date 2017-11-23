@@ -1,10 +1,11 @@
 defmodule EHealth.PRM.LegalEntities do
   @moduledoc false
 
+  use EHealth.Search, EHealth.PRMRepo
+
   alias EHealth.PRMRepo
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
   alias EHealth.PRM.LegalEntities.Search
-  use EHealth.PRM.Search
 
   @search_fields ~w(
     id

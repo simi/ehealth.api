@@ -1,7 +1,7 @@
 defmodule EHealth.PRM.MedicalPrograms do
   @moduledoc false
 
-  use EHealth.PRM.Search
+  use EHealth.Search, EHealth.PRMRepo
 
   alias EHealth.PRMRepo
   alias EHealth.PRM.Medications.API, as: MedicationsAPI

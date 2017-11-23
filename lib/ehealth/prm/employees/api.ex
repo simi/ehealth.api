@@ -1,12 +1,13 @@
 defmodule EHealth.PRM.Employees do
   @moduledoc false
 
+  use EHealth.Search, EHealth.PRMRepo
+
   alias EHealth.Repo
   alias EHealth.PRMRepo
   alias EHealth.PRM.Employees.Schema, as: Employee
   alias EHealth.PRM.Employees.Search
   alias Ecto.Multi
-  use EHealth.PRM.Search
 
   @search_fields ~w(
     ids

@@ -3,7 +3,7 @@ defmodule EHealth.PRM.Medications.API do
   The Medications context.
   """
 
-  use EHealth.PRM.Search
+  use EHealth.Search, EHealth.PRMRepo
 
   import Ecto.Changeset
   import Ecto.Query, warn: false

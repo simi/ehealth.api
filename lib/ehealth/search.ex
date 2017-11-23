@@ -1,18 +1,17 @@
-defmodule EHealth.PRM.Search do
+defmodule EHealth.Search do
   @moduledoc """
   Search implementation
   """
 
-  defmacro __using__(_) do
+  defmacro __using__(repo) do
     quote do
       import Ecto.{Query, Changeset}, warn: false
 
-      alias EHealth.PRMRepo
-
       def search(%Ecto.Changeset{valid?: true, changes: changes}, search_params, entity) do
+        repo = unquote(repo)
         entity
         |> get_search_query(changes)
-        |> PRMRepo.paginate(search_params)
+        |> repo.paginate(search_params)
       end
 
       def search(%Ecto.Changeset{valid?: false} = changeset, _search_params, _entity) do

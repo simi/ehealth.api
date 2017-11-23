@@ -1,4 +1,4 @@
-defmodule EHealth.PRM.PartyUsers.Schema do
+defmodule EHealth.PartyUsers.PartyUser do
   @moduledoc false
 
   use Ecto.Schema

@@ -5,7 +5,7 @@ defmodule EHealth.Employee.EmployeeUpdater do
 
   alias EHealth.API.OPS
   alias EHealth.API.Mithril
-  alias EHealth.PRM.PartyUsers
+  alias EHealth.PartyUsers
   alias EHealth.PRM.Employees
   alias EHealth.PRM.Employees.Schema, as: Employee
   alias EHealth.PRMRepo
@@ -60,7 +60,7 @@ defmodule EHealth.Employee.EmployeeUpdater do
     client_id = employee.legal_entity_id
     role_name = employee.employee_type
 
-    with {:ok, parties} <- PartyUsers.get_party_users_by_party_id(employee.party_id) do
+    with parties <- PartyUsers.list!(%{party_id: employee.party_id}) do
       revoke_user_auth_data_async(parties, client_id, role_name, headers)
     end
   end

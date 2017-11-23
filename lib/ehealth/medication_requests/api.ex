@@ -2,10 +2,10 @@ defmodule EHealth.MedicationRequests.API do
   @moduledoc false
 
   alias EHealth.API.OPS
-  alias EHealth.PRM.PartyUsers
+  alias EHealth.PartyUsers
   alias EHealth.PRM.Employees
   alias EHealth.Divisions.Division
-  alias EHealth.PRM.PartyUsers.Schema, as: PartyUser
+  alias EHealth.PartyUsers.PartyUser
   alias EHealth.PRM.Employees.Schema, as: Employee
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
   alias EHealth.PRM.MedicalPrograms.Schema, as: MedicalProgram
@@ -201,7 +201,7 @@ defmodule EHealth.MedicationRequests.API do
   end
 
   defp get_party_user(user_id) do
-    with %PartyUser{} = party_user <- PartyUsers.get_party_users_by_user_id(user_id) do
+    with [party_user] <- PartyUsers.list!(%{user_id: user_id}) do
       party_user
     else
       _ ->

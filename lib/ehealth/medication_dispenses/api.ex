@@ -11,7 +11,7 @@ defmodule EHealth.MedicationDispense.API do
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
   alias EHealth.PRM.Employees.Schema, as: Employee
   alias EHealth.Divisions.Division
-  alias EHealth.PRM.PartyUsers.Schema, as: PartyUser
+  alias EHealth.PartyUsers.PartyUser
   alias EHealth.Parties.Party
   alias EHealth.PRM.Medications.Medication.Schema, as: Medication
   alias EHealth.PRM.Medications.Program.Schema, as: ProgramMedication
@@ -20,7 +20,7 @@ defmodule EHealth.MedicationDispense.API do
   alias EHealth.MedicationDispenses.SearchByMedicationRequest
   alias EHealth.Validators.JsonSchema
   alias EHealth.Validators.Reference
-  alias EHealth.PRM.PartyUsers
+  alias EHealth.PartyUsers
   alias EHealth.Parties
   alias EHealth.PRMRepo
   alias EHealth.MedicationRequests.API, as: MedicationRequests
@@ -103,7 +103,7 @@ defmodule EHealth.MedicationDispense.API do
     with :ok                       <- JsonSchema.validate(:medication_dispense, params),
          params                    <- params["medication_dispense"],
          {:ok, legal_entity}       <- Reference.validate(:legal_entity, legal_entity_id),
-         {:ok, party_user}         <- get_party(user_id),
+         {:ok, party_user}         <- get_party_user(user_id),
          :ok                       <- validate_legal_entity(legal_entity),
          {:ok, medication_request} <- validate_medication_request(params["medication_request_id"]),
          :ok                       <- validate_employee(party_user, legal_entity_id),
@@ -483,10 +483,10 @@ defmodule EHealth.MedicationDispense.API do
     end
   end
 
-  defp get_party(user_id) do
-    case PartyUsers.get_party_users_by_user_id(user_id) do
-      nil -> {:error, {:bad_request, "Party not found"}}
-      party_user -> {:ok, party_user}
+  defp get_party_user(user_id) do
+    case PartyUsers.list!(%{user_id: user_id}) do
+      [] -> {:error, {:bad_request, "Party not found"}}
+      [party_user] -> {:ok, party_user}
     end
   end
 

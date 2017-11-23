@@ -5,10 +5,10 @@ defmodule EHealth.Divisions do
 
   import Ecto.Changeset, warn: false
   import EHealth.Utils.Connection, only: [get_client_id: 1, get_consumer_id: 1]
-  import EHealth.PRM.AuditLogs, only: [create_audit_logs: 1]
 
-  use EHealth.PRM.Search
+  use EHealth.Search, EHealth.PRMRepo
 
+  alias EHealth.PRMRepo
   alias EHealth.Divisions.Search
   alias EHealth.API.UAddress
   alias EHealth.Validators.Addresses
@@ -19,6 +19,7 @@ defmodule EHealth.Divisions do
   alias EHealth.Validators.JsonObjects
   alias EHealth.Dictionaries
   alias Ecto.Multi
+  alias EctoTrail.Changelog
 
   @search_fields ~w(
     ids
@@ -270,18 +271,19 @@ defmodule EHealth.Divisions do
   end
 
   defp log_changes(%{update_divisions_mountain_group: {_, updated_divisions}}, consumer_id) do
-    {_, changelog} =
+    changes =
       updated_divisions
       |> Enum.map(fn ud ->
-          %{
-            actor_id: consumer_id,
-            resource: "divisions",
-            resource_id: ud.id,
-            changeset: %{mountain_group: ud.mountain_group},
-          }
-         end)
-      |> create_audit_logs()
+        %{
+          actor_id: consumer_id,
+          resource: "divisions",
+          resource_id: ud.id,
+          changeset: %{mountain_group: ud.mountain_group},
+        }
+      end)
+      |> Enum.map(&Map.put(&1, :inserted_at, NaiveDateTime.utc_now))
 
+    {_, changelog} = PRMRepo.insert_all(Changelog, changes, returning: true)
     {:ok, changelog}
   end
 end

@@ -9,8 +9,8 @@ defmodule EHealth.DeclarationRequest.API.Sign do
   alias EHealth.DeclarationRequest
   alias EHealth.DeclarationRequest.API
   alias EHealth.PRM.Employees
-  alias EHealth.PRM.PartyUsers
-  alias EHealth.PRM.PartyUsers.Schema, as: PartyUser
+  alias EHealth.PartyUsers
+  alias EHealth.PartyUsers.PartyUser
 
   require Logger
 
@@ -105,12 +105,12 @@ defmodule EHealth.DeclarationRequest.API.Sign do
   def check_employee_id({:ok, {content, db_data}}, headers) do
     employee_id = get_in(content, ["employee", "id"])
     with consumer_id <- get_consumer_id(headers),
-         %PartyUser{} = party_user <- PartyUsers.get_party_users_by_user_id(consumer_id),
+         [party_user] <- PartyUsers.list!(%{user_id: consumer_id}),
          :ok <- check_employees(party_user, employee_id)
    do
      {:ok, {content, db_data}}
    else
-     nil -> {:error, :forbidden}
+     [] -> {:error, :forbidden}
    end
   end
   def check_employee_id(err, _headers), do: err

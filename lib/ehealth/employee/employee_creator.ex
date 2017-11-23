@@ -11,9 +11,9 @@ defmodule EHealth.Employee.EmployeeCreator do
   alias EHealth.PRM.Employees
   alias EHealth.Parties.Party
   alias EHealth.PRM.Employees.Schema, as: Employee
-  alias EHealth.PRM.PartyUsers.Schema, as: PartyUser
+  alias EHealth.PartyUsers.PartyUser
   alias EHealth.Parties
-  alias EHealth.PRM.PartyUsers
+  alias EHealth.PartyUsers
   alias EHealth.Employee.EmployeeUpdater
   alias EHealth.PRMRepo
 
@@ -75,7 +75,7 @@ defmodule EHealth.Employee.EmployeeCreator do
       true ->
         {:ok, party}
       false ->
-        case PartyUsers.create_party_user(id, consumer_id) do
+        case PartyUsers.create(id, consumer_id) do
           {:ok, _} -> {:ok, party}
           {:error, _} = err -> err
         end
@@ -136,17 +136,17 @@ defmodule EHealth.Employee.EmployeeCreator do
   end
 
   defp check_party_user(user_id, []) do
-    with nil <- PartyUsers.get_party_users_by_user_id(user_id) do
+    with [] <- PartyUsers.list!(%{user_id: user_id}) do
       :ok
     else
       _ -> {:error, {:conflict, "Email is already used by another person"}}
     end
   end
   defp check_party_user(user_id, [%Party{id: party_id}]) do
-    with nil <- PartyUsers.get_party_users_by_user_id(user_id) do
+    with [] <- PartyUsers.list!(%{user_id: user_id}) do
       :ok
     else
-      %PartyUser{party: %Party{id: id}} when id == party_id -> :ok
+      [%PartyUser{party: %Party{id: id}}] when id == party_id -> :ok
       _ -> {:error, {:conflict, "Email is already used by another person"}}
     end
   end

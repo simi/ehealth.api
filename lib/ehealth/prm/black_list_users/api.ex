@@ -1,7 +1,7 @@
 defmodule EHealth.PRM.BlackListUsers do
   @moduledoc false
 
-  use EHealth.PRM.Search
+  use EHealth.Search, EHealth.PRMRepo
 
   import Ecto.{Query, Changeset}, warn: false
   import EHealth.Utils.Connection, only: [get_consumer_id: 1]
