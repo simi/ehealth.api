@@ -1,4 +1,4 @@
-defmodule EHealth.PRM.Divisions.Search do
+defmodule EHealth.Divisions.Search do
   @moduledoc false
 
   use Ecto.Schema

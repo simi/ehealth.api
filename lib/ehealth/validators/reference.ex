@@ -4,13 +4,13 @@ defmodule EHealth.Validators.Reference do
   """
 
   alias EHealth.API.OPS
-  alias EHealth.PRM.Divisions
+  alias EHealth.Divisions
   alias EHealth.PRM.Employees
   alias EHealth.PRM.LegalEntities
   alias EHealth.PRM.MedicalPrograms
   alias EHealth.PRM.Medications.API, as: MedicationsAPI
   alias EHealth.PRM.Employees.Schema, as: Employee
-  alias EHealth.PRM.Divisions.Schema, as: Division
+  alias EHealth.Divisions.Division
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
   alias EHealth.PRM.MedicalPrograms.Schema, as: MedicalProgram
   alias EHealth.PRM.Medications.Medication.Schema, as: Medication
@@ -33,7 +33,7 @@ defmodule EHealth.Validators.Reference do
     end
   end
   def validate(:division = type, id) do
-    with %Division{} = division <- Divisions.get_division_by_id(id) do
+    with %Division{} = division <- Divisions.get_by_id(id) do
       {:ok, division}
     else
       _ -> error(type)

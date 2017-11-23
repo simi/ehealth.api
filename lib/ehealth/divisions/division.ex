@@ -1,4 +1,4 @@
-defmodule EHealth.PRM.Divisions.Schema do
+defmodule EHealth.Divisions.Division do
   @moduledoc false
 
   use Ecto.Schema

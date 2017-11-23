@@ -9,11 +9,11 @@ defmodule EHealth.DeclarationRequest.API do
   alias EHealth.Repo
   alias EHealth.PRM.GlobalParameters
   alias EHealth.PRM.LegalEntities
-  alias EHealth.PRM.Divisions
+  alias EHealth.Divisions
   alias EHealth.PRM.Employees
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
   alias EHealth.PRM.Employees.Schema, as: Employee
-  alias EHealth.PRM.Divisions.Schema, as: Division
+  alias EHealth.Divisions.Division
   alias EHealth.DeclarationRequest
   alias EHealth.DeclarationRequest.API.Create
   alias EHealth.DeclarationRequest.API.Approve
@@ -101,7 +101,7 @@ defmodule EHealth.DeclarationRequest.API do
            :medical_service_provider
            ),
          {:ok, %Division{} = division} <- Helpers.get_assoc_by_func("division_id",
-                                            fn -> Divisions.get_division_by_id(attrs["division_id"]) end)
+                                            fn -> Divisions.get_by_id(attrs["division_id"]) end)
     do
       updates = [
         status: DeclarationRequest.status(:cancelled),

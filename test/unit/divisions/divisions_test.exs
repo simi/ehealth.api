@@ -1,4 +1,4 @@
-defmodule EHealth.Unit.Divisions.APITest do
+defmodule EHealth.Unit.DivisionsTest do
   @moduledoc """
   Divisions api tests
   """
@@ -6,7 +6,7 @@ defmodule EHealth.Unit.Divisions.APITest do
   import EHealth.SimpleFactory, only: [address: 1]
 
   use EHealth.Web.ConnCase, async: false
-  alias EHealth.Divisions.API
+  alias EHealth.Divisions, as: API
 
   describe "Additional JSON objects validation: validate_json_objects/1" do
     setup _context do

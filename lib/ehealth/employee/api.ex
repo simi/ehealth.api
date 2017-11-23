@@ -20,7 +20,7 @@ defmodule EHealth.Employee.API do
   alias EHealth.Employee.Validator
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
   alias EHealth.PRM.Employees.Schema, as: Employee
-  alias EHealth.PRM.Divisions.Schema, as: Division
+  alias EHealth.Divisions.Division
   alias EHealth.PRMRepo
   alias EHealth.PRM.Employees
   alias EHealth.PRM.Parties

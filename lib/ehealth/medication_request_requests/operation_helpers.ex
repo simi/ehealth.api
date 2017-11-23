@@ -4,7 +4,7 @@ defmodule EHealth.MedicationRequestRequest.OperationHelpers do
 
   alias EHealth.PRM.Employees
   alias EHealth.PRM.LegalEntities
-  alias EHealth.PRM.Divisions
+  alias EHealth.Divisions
   alias EHealth.MedicationRequestRequest.Validations
   alias EHealth.Utils.Helpers
   alias EHealth.API.MPI
@@ -61,7 +61,7 @@ defmodule EHealth.MedicationRequestRequest.OperationHelpers do
   end
 
   def get_division(id) do
-    Helpers.get_assoc_by_func("division_id", fn -> Divisions.get_division_by_id(id) end)
+    Helpers.get_assoc_by_func("division_id", fn -> Divisions.get_by_id(id) end)
   end
 
   def validate_division(operation, division) do

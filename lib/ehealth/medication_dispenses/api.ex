@@ -4,13 +4,13 @@ defmodule EHealth.MedicationDispense.API do
   import EHealth.Utils.Connection, only: [get_client_id: 1, get_consumer_id: 1]
   import Ecto.Changeset, only: [cast: 3]
   import Ecto.Query
-  alias EHealth.PRM.Divisions
+  alias EHealth.Divisions
   alias EHealth.PRM.Employees
   alias EHealth.PRM.LegalEntities
   alias EHealth.PRM.MedicalPrograms
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
   alias EHealth.PRM.Employees.Schema, as: Employee
-  alias EHealth.PRM.Divisions.Schema, as: Division
+  alias EHealth.Divisions.Division
   alias EHealth.PRM.PartyUsers.Schema, as: PartyUser
   alias EHealth.PRM.Parties.Schema, as: Party
   alias EHealth.PRM.Medications.Medication.Schema, as: Medication
@@ -79,7 +79,7 @@ defmodule EHealth.MedicationDispense.API do
          medication_dispense <- Map.put(medication_dispense, "details", details),
          {:ok, party} <- get_party_by_id(medication_dispense["party_id"]),
          :ok <- validate_legal_entity_id(medication_dispense, legal_entity_id),
-         division <- Divisions.get_division_by_id(medication_dispense["division_id"]),
+         division <- Divisions.get_by_id(medication_dispense["division_id"]),
          medical_program <- MedicalPrograms.get_by_id(medication_dispense["medical_program_id"]),
          medication_request <- medication_dispense["medication_request"],
          {:ok, medication_request} <- MedicationRequests.get_references(medication_request)

@@ -4,7 +4,7 @@ defmodule EHealth.MedicationRequests.API do
   alias EHealth.API.OPS
   alias EHealth.PRM.PartyUsers
   alias EHealth.PRM.Employees
-  alias EHealth.PRM.Divisions.Schema, as: Division
+  alias EHealth.Divisions.Division
   alias EHealth.PRM.PartyUsers.Schema, as: PartyUser
   alias EHealth.PRM.Employees.Schema, as: Employee
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
@@ -15,7 +15,7 @@ defmodule EHealth.MedicationRequests.API do
   alias EHealth.PRM.Medications.Medication.Ingredient
   alias EHealth.PRM.Medications.INNMDosage.Ingredient, as: INNMDosageIngredient
   alias EHealth.PRM.LegalEntities
-  alias EHealth.PRM.Divisions
+  alias EHealth.Divisions
   alias EHealth.PRM.Employees
   alias EHealth.PRM.MedicalPrograms
   alias EHealth.API.MPI
@@ -211,7 +211,7 @@ defmodule EHealth.MedicationRequests.API do
   end
 
   def get_references(medication_request) do
-    with %Division{} = division <- Divisions.get_division_by_id(medication_request["division_id"]),
+    with %Division{} = division <- Divisions.get_by_id(medication_request["division_id"]),
          %Employee{} = employee <- Employees.get_employee_by_id(medication_request["employee_id"]),
          %MedicalProgram{} = medical_program <- MedicalPrograms.get_by_id(medication_request["medical_program_id"]),
          %INNMDosage{} = medication <- MedicationsAPI.get_innm_dosage_by_id(medication_request["medication_id"]),

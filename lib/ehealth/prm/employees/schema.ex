@@ -2,7 +2,7 @@ defmodule EHealth.PRM.Employees.Schema do
   @moduledoc false
 
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
-  alias EHealth.PRM.Divisions.Schema, as: Division
+  alias EHealth.Divisions.Division
   alias EHealth.PRM.Parties.Schema, as: Party
 
   use Ecto.Schema

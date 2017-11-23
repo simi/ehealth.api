@@ -5,7 +5,7 @@ defmodule EHealth.Web.EmployeeView do
 
   alias EHealth.Web.PartyView
   alias EHealth.PRM.Parties.Schema, as: Party
-  alias EHealth.PRM.Divisions.Schema, as: Division
+  alias EHealth.Divisions.Division
   alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
   alias EHealth.PRM.Employees.Schema, as: Employee
 
