@@ -7,7 +7,7 @@ defmodule EHealth.DeclarationRequest.API do
   alias Ecto.Multi
   alias Ecto.UUID
   alias EHealth.Repo
-  alias EHealth.PRM.GlobalParameters
+  alias EHealth.GlobalParameters
   alias EHealth.PRM.LegalEntities
   alias EHealth.Divisions
   alias EHealth.Employees

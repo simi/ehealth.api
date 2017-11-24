@@ -10,7 +10,7 @@ defmodule EHealth.EmployeeRequest.Terminator do
   import Ecto.Query
 
   alias EHealth.EmployeeRequests.EmployeeRequest, as: Request
-  alias EHealth.PRM.GlobalParameters
+  alias EHealth.GlobalParameters
 
   # Client API
 

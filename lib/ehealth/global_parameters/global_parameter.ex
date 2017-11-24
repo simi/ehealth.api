@@ -1,4 +1,4 @@
-defmodule EHealth.PRM.GlobalParameters.Schema do
+defmodule EHealth.GlobalParameters.GlobalParameter do
   @moduledoc false
 
   use Ecto.Schema
