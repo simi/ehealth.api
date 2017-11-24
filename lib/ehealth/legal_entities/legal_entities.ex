@@ -13,7 +13,6 @@ defmodule EHealth.LegalEntities do
   alias Scrivener.Page
   alias Ecto.Date
   alias Ecto.UUID
-  alias EHealth.PRM.Registries
   alias EHealth.API.MediaStorage
   alias EHealth.API.Mithril
   alias EHealth.OAuth.API, as: OAuth
@@ -22,6 +21,7 @@ defmodule EHealth.LegalEntities do
   alias EHealth.LegalEntities.Validator
   alias EHealth.EmployeeRequests
   alias EHealth.Employees.Employee
+  alias EHealth.Registries
   alias Ecto.Schema.Metadata
 
   require Logger

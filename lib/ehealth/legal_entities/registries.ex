@@ -1,4 +1,4 @@
-defmodule EHealth.PRM.Registries do
+defmodule EHealth.Registries do
   @moduledoc """
   The boundary for the Registries system.
   """
@@ -6,7 +6,7 @@ defmodule EHealth.PRM.Registries do
   import Ecto.{Query, Changeset}, warn: false
 
   alias EHealth.PRMRepo, as: Repo
-  alias EHealth.PRM.Registries.Schema, as: UkrMedRegistry
+  alias EHealth.LegalEntities.Registry, as: UkrMedRegistry
   alias EHealth.LegalEntities.LegalEntity
 
   def count_registries_with_edrpou(edrpou, type) do
