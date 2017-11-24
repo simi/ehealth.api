@@ -9,7 +9,7 @@ defmodule EHealth.Unit.LegalEntityTest do
   alias EHealth.PRMRepo
   alias EHealth.EmployeeRequests.EmployeeRequest
   alias EHealth.LegalEntities, as: API
-  alias EHealth.LegalEntity.Validator
+  alias EHealth.LegalEntities.Validator
   alias EHealth.LegalEntities.LegalEntity
 
   describe "validations" do

@@ -3,7 +3,7 @@ defmodule EHealth.Unit.ValidatorTest do
 
   use EHealth.Web.ConnCase
 
-  alias EHealth.LegalEntity.Validator
+  alias EHealth.LegalEntities.Validator
   alias EHealth.Validators.KVEDs
   alias EHealth.API.MediaStorage
   alias EHealth.EmployeeRequests

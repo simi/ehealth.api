@@ -15,14 +15,14 @@ defmodule EHealth.LegalEntities do
   alias Ecto.UUID
   alias EHealth.PRM.Registries
   alias EHealth.API.MediaStorage
-  alias EHealth.OAuth.API, as: OAuth
-  alias EHealth.LegalEntity.Validator
-  alias EHealth.EmployeeRequests
   alias EHealth.API.Mithril
+  alias EHealth.OAuth.API, as: OAuth
   alias EHealth.LegalEntities.LegalEntity
+  alias EHealth.LegalEntities.Search
+  alias EHealth.LegalEntities.Validator
+  alias EHealth.EmployeeRequests
   alias EHealth.Employees.Employee
   alias Ecto.Schema.Metadata
-  alias EHealth.LegalEntities.Search
 
   require Logger
 

@@ -6,7 +6,7 @@ defmodule EHealth.Web.LegalEntityController do
 
   alias Scrivener.Page
   alias EHealth.LegalEntities, as: API
-  alias EHealth.LegalEntity.LegalEntityUpdater
+  alias EHealth.LegalEntities.LegalEntityUpdater
 
   action_fallback EHealth.Web.FallbackController
 

@@ -1,4 +1,4 @@
-defmodule EHealth.PRM.MedicalServiceProviders.Schema do
+defmodule EHealth.LegalEntities.MedicalServiceProvider do
   @moduledoc false
 
   use Ecto.Schema

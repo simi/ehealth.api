@@ -1,4 +1,4 @@
-defmodule EHealth.LegalEntity.Validator do
+defmodule EHealth.LegalEntities.Validator do
   @moduledoc """
   Request, TaxID, Digital signature validators
   """
@@ -7,7 +7,7 @@ defmodule EHealth.LegalEntity.Validator do
 
   alias EHealth.API.Signature
   alias EHealth.Validators.KVEDs
-  alias EHealth.LegalEntity.Request
+  alias EHealth.LegalEntities.LegalEntityRequest
   alias EHealth.Validators.TaxID
   alias EHealth.Validators.Addresses
   alias EHealth.Validators.BirthDate
@@ -58,7 +58,7 @@ defmodule EHealth.LegalEntity.Validator do
       signed_content_encoding
     )a
 
-    %Request{}
+    %LegalEntityRequest{}
     |> cast(params, fields)
     |> validate_required(fields)
     |> validate_inclusion(:signed_content_encoding, ["base64"])
@@ -72,7 +72,7 @@ defmodule EHealth.LegalEntity.Validator do
   def validate_signature(err, _), do: err
 
   def normalize_signature_error({:error, %{"meta" => %{"description" => error}}}) do
-    %Request{}
+    %LegalEntityRequest{}
     |> cast(%{}, [:signed_legal_entity_request])
     |> add_error(:signed_legal_entity_request, error)
   end

@@ -1,7 +1,7 @@
 defmodule EHealth.LegalEntities.LegalEntity do
   @moduledoc false
 
-  alias EHealth.PRM.MedicalServiceProviders.Schema, as: MedicalServiceProvider
+  alias EHealth.LegalEntities.MedicalServiceProvider
 
   use Ecto.Schema
 

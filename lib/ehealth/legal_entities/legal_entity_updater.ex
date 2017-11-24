@@ -1,4 +1,4 @@
-defmodule EHealth.LegalEntity.LegalEntityUpdater do
+defmodule EHealth.LegalEntities.LegalEntityUpdater do
   @moduledoc false
 
   import EHealth.Utils.Connection, only: [get_consumer_id: 1]
