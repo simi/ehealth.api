@@ -1,4 +1,4 @@
-defmodule EHealth.PRM.BlackListUsers do
+defmodule EHealth.BlackListUsers do
   @moduledoc false
 
   use EHealth.Search, EHealth.PRMRepo
@@ -11,8 +11,8 @@ defmodule EHealth.PRM.BlackListUsers do
   alias EHealth.Parties
   alias EHealth.Parties.Party
   alias EHealth.API.Mithril
-  alias EHealth.PRM.BlackListUsers.Search
-  alias EHealth.PRM.BlackListUsers.Schema, as: BlackListUser
+  alias EHealth.BlackListUsers.Search
+  alias EHealth.BlackListUsers.BlackListUser
 
   @fields_required [:tax_id]
   @fields_optional [:is_active]

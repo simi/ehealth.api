@@ -1,4 +1,4 @@
-defmodule EHealth.PRM.BlackListUsers.Search do
+defmodule EHealth.BlackListUsers.Search do
   @moduledoc false
 
   use Ecto.Schema

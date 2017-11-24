@@ -21,7 +21,7 @@ defmodule EHealth.EmployeeRequests do
   alias EHealth.Bamboo.Emails.EmployeeCreatedNotification, as: EmployeeCreatedNotificationEmail
   alias EHealth.API.Mithril
   alias EHealth.Employees
-  alias EHealth.PRM.BlackListUsers
+  alias EHealth.BlackListUsers
   alias Ecto.Multi
 
   require Logger
