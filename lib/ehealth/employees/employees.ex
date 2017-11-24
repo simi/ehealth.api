@@ -5,9 +5,9 @@ defmodule EHealth.Employees do
 
   import Ecto.Changeset
   import EHealth.Utils.Connection
-  import EHealth.LegalEntity.API, only: [get_client_type_name: 2]
   import EHealth.Plugs.ClientContext, only: [authorize_legal_entity_id: 3]
 
+  alias EHealth.API.Mithril
   alias EHealth.EmployeeRequests.EmployeeRequest, as: Request
   alias EHealth.Employees.EmployeeCreator
   alias EHealth.Employees.UserRoleCreator
@@ -99,7 +99,7 @@ defmodule EHealth.Employees do
   def get_by_id(id, headers) do
     client_id = get_client_id(headers)
     with employee <- get_by_id!(id),
-         {:ok, client_type} <- get_client_type_name(client_id, headers),
+         {:ok, client_type} <- Mithril.get_client_type_name(client_id, headers),
          :ok <- authorize_legal_entity_id(employee.legal_entity_id, client_id, client_type)
     do
       {:ok, employee
@@ -115,6 +115,12 @@ defmodule EHealth.Employees do
     |> join(:left, [e], p in assoc(e, :party))
     |> join(:left, [e], le in assoc(e, :legal_entity))
     |> preload([e, p, le], [party: p, legal_entity: le])
+  end
+
+  def get_by_ids(ids) when is_list(ids) do
+    Employee
+    |> where([d], d.id in ^ids)
+    |> PRMRepo.all()
   end
 
   def create(attrs, author_id) do

@@ -6,7 +6,7 @@ defmodule EHealth.Web.EmployeeRequestControllerTest do
   import EHealth.SimpleFactory
 
   alias EHealth.EmployeeRequests.EmployeeRequest, as: Request
-  alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
+  alias EHealth.LegalEntities.LegalEntity
   alias EHealth.Employees.Employee
   alias EHealth.PartyUsers.PartyUser
   alias EHealth.MockServer

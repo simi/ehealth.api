@@ -6,12 +6,12 @@ defmodule EHealth.Validators.Reference do
   alias EHealth.API.OPS
   alias EHealth.Divisions
   alias EHealth.Employees
-  alias EHealth.PRM.LegalEntities
+  alias EHealth.LegalEntities
   alias EHealth.PRM.MedicalPrograms
   alias EHealth.PRM.Medications.API, as: MedicationsAPI
   alias EHealth.Employees.Employee
   alias EHealth.Divisions.Division
-  alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
+  alias EHealth.LegalEntities.LegalEntity
   alias EHealth.PRM.MedicalPrograms.Schema, as: MedicalProgram
   alias EHealth.PRM.Medications.Medication.Schema, as: Medication
 
@@ -47,7 +47,7 @@ defmodule EHealth.Validators.Reference do
     end
   end
   def validate(:legal_entity = type, id) do
-    with %LegalEntity{} = legal_entity <- LegalEntities.get_legal_entity_by_id(id) do
+    with %LegalEntity{} = legal_entity <- LegalEntities.get_by_id(id) do
       {:ok, legal_entity}
     else
       _ -> error(type)

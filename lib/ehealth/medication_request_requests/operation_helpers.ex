@@ -3,7 +3,7 @@ defmodule EHealth.MedicationRequestRequest.OperationHelpers do
   import Ecto.Changeset
 
   alias EHealth.Employees
-  alias EHealth.PRM.LegalEntities
+  alias EHealth.LegalEntities
   alias EHealth.Divisions
   alias EHealth.MedicationRequestRequest.Validations
   alias EHealth.Utils.Helpers
@@ -34,7 +34,7 @@ defmodule EHealth.MedicationRequestRequest.OperationHelpers do
   end
 
   def get_legal_entity(client_id) do
-    case LegalEntities.get_by_id_preload(client_id, :medical_service_provider) do
+    case LegalEntities.get_by_id(client_id) do
       nil -> {:error, "client_id"}
       le -> {:ok, le}
     end

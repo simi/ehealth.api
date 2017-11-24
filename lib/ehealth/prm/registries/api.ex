@@ -7,7 +7,7 @@ defmodule EHealth.PRM.Registries do
 
   alias EHealth.PRMRepo, as: Repo
   alias EHealth.PRM.Registries.Schema, as: UkrMedRegistry
-  alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
+  alias EHealth.LegalEntities.LegalEntity
 
   def count_registries_with_edrpou(edrpou, type) do
     Repo.one(

@@ -4,7 +4,7 @@ defmodule EHealth.SimpleFactory do
   alias Ecto.UUID
   alias EHealth.Repo
   alias EHealth.PRMRepo
-  alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
+  alias EHealth.LegalEntities.LegalEntity
   alias EHealth.EmployeeRequests.EmployeeRequest, as: Request
   alias EHealth.DeclarationRequest
 

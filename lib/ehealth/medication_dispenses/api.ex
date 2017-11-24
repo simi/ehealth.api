@@ -6,9 +6,9 @@ defmodule EHealth.MedicationDispense.API do
   import Ecto.Query
   alias EHealth.Divisions
   alias EHealth.Employees
-  alias EHealth.PRM.LegalEntities
+  alias EHealth.LegalEntities
   alias EHealth.PRM.MedicalPrograms
-  alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
+  alias EHealth.LegalEntities.LegalEntity
   alias EHealth.Employees.Employee
   alias EHealth.Divisions.Division
   alias EHealth.PartyUsers.PartyUser

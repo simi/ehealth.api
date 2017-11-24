@@ -1,11 +1,11 @@
 defmodule EHealth.Employees.Employee do
   @moduledoc false
 
-  alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
+  use Ecto.Schema
+
+  alias EHealth.LegalEntities.LegalEntity
   alias EHealth.Divisions.Division
   alias EHealth.Parties.Party
-
-  use Ecto.Schema
 
   @type_owner "OWNER"
   @type_doctor "DOCTOR"

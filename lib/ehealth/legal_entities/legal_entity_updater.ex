@@ -3,9 +3,9 @@ defmodule EHealth.LegalEntity.LegalEntityUpdater do
 
   import EHealth.Utils.Connection, only: [get_consumer_id: 1]
 
-  alias EHealth.PRM.LegalEntities
+  alias EHealth.LegalEntities
   alias EHealth.Employees.EmployeeUpdater
-  alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
+  alias EHealth.LegalEntities.LegalEntity
   alias EHealth.Employees.Employee
   alias EHealth.Employees
 
@@ -17,7 +17,7 @@ defmodule EHealth.LegalEntity.LegalEntityUpdater do
   @employee_status_approved Employee.status(:approved)
 
   def deactivate(id, headers) do
-    with legal_entity <- LegalEntities.get_legal_entity_by_id!(id),
+    with legal_entity <- LegalEntities.get_by_id!(id),
          :ok <- check_transition(legal_entity),
          :ok <- deactivate_employees(legal_entity, headers)
     do
@@ -56,7 +56,7 @@ defmodule EHealth.LegalEntity.LegalEntityUpdater do
     with params <- get_update_legal_entity_params(headers),
          params <- put_legal_entity_status(params)
     do
-      LegalEntities.update_legal_entity(legal_entity, params, get_consumer_id(headers))
+      LegalEntities.update(legal_entity, params, get_consumer_id(headers))
     end
   end
 

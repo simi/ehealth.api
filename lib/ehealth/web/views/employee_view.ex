@@ -6,7 +6,7 @@ defmodule EHealth.Web.EmployeeView do
   alias EHealth.Web.PartyView
   alias EHealth.Parties.Party
   alias EHealth.Divisions.Division
-  alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
+  alias EHealth.LegalEntities.LegalEntity
   alias EHealth.Employees.Employee
 
   @doctor Employee.type(:doctor)

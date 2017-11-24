@@ -7,14 +7,14 @@ defmodule EHealth.MedicationRequests.API do
   alias EHealth.Divisions.Division
   alias EHealth.PartyUsers.PartyUser
   alias EHealth.Employees.Employee
-  alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
+  alias EHealth.LegalEntities.LegalEntity
   alias EHealth.PRM.MedicalPrograms.Schema, as: MedicalProgram
   alias EHealth.PRM.Medications.INNMDosage.Schema, as: INNMDosage
   alias EHealth.PRM.Medications.Program.Schema, as: ProgramMedication
   alias EHealth.PRM.Medications.API, as: MedicationsAPI
   alias EHealth.PRM.Medications.Medication.Ingredient
   alias EHealth.PRM.Medications.INNMDosage.Ingredient, as: INNMDosageIngredient
-  alias EHealth.PRM.LegalEntities
+  alias EHealth.LegalEntities
   alias EHealth.Divisions
   alias EHealth.PRM.MedicalPrograms
   alias EHealth.API.MPI
@@ -150,7 +150,7 @@ defmodule EHealth.MedicationRequests.API do
   end
   defp do_get_medication_request(legal_entity_id, user_id, _, id, headers) do
     with %PartyUser{party: party} <- get_party_user(user_id),
-         %LegalEntity{} = legal_entity <- LegalEntities.get_legal_entity_by_id(legal_entity_id),
+         %LegalEntity{} = legal_entity <- LegalEntities.get_by_id(legal_entity_id),
          search_params <- get_show_search_params(party.id, legal_entity, id),
          {:ok, %{"data" => [medication_request]}} <- OPS.get_doctor_medication_requests(search_params, headers)
     do
@@ -214,7 +214,7 @@ defmodule EHealth.MedicationRequests.API do
          %Employee{} = employee <- Employees.get_by_id(medication_request["employee_id"]),
          %MedicalProgram{} = medical_program <- MedicalPrograms.get_by_id(medication_request["medical_program_id"]),
          %INNMDosage{} = medication <- MedicationsAPI.get_innm_dosage_by_id(medication_request["medication_id"]),
-         %LegalEntity{} = legal_entity <- LegalEntities.get_legal_entity_by_id(medication_request["legal_entity_id"]),
+         %LegalEntity{} = legal_entity <- LegalEntities.get_by_id(medication_request["legal_entity_id"]),
          {:ok, %{"data" => person}} <- MPI.person(medication_request["person_id"])
     do
       {

@@ -8,10 +8,10 @@ defmodule EHealth.DeclarationRequest.API do
   alias Ecto.UUID
   alias EHealth.Repo
   alias EHealth.GlobalParameters
-  alias EHealth.PRM.LegalEntities
+  alias EHealth.LegalEntities
   alias EHealth.Divisions
   alias EHealth.Employees
-  alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
+  alias EHealth.LegalEntities.LegalEntity
   alias EHealth.Employees.Employee
   alias EHealth.Divisions.Division
   alias EHealth.DeclarationRequest
@@ -96,10 +96,7 @@ defmodule EHealth.DeclarationRequest.API do
          {:ok, _} <- Validations.validate_addresses(get_in(attrs, ["person", "addresses"])),
          {:ok, %Employee{} = employee} <- Helpers.get_assoc_by_func("employee_id",
                                             fn -> Employees.get_by_id(attrs["employee_id"]) end),
-         %LegalEntity{} = legal_entity <- LegalEntities.get_by_id_preload(
-           client_id,
-           :medical_service_provider
-           ),
+         %LegalEntity{} = legal_entity <- LegalEntities.get_by_id(client_id),
          {:ok, %Division{} = division} <- Helpers.get_assoc_by_func("division_id",
                                             fn -> Divisions.get_by_id(attrs["division_id"]) end)
     do

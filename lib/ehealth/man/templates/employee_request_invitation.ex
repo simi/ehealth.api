@@ -6,14 +6,14 @@ defmodule EHealth.Man.Templates.EmployeeRequestInvitation do
   alias EHealth.EmployeeRequests.EmployeeRequest, as: Request
   alias EHealth.Dictionaries
   alias EHealth.Utils.AddressMerger
-  alias EHealth.PRM.LegalEntities
-  alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
+  alias EHealth.LegalEntities
+  alias EHealth.LegalEntities.LegalEntity
 
   def render(%Request{id: id, data: data}) do
     clinic_info =
       data
       |> Map.get("legal_entity_id")
-      |> LegalEntities.get_legal_entity_by_id()
+      |> LegalEntities.get_by_id()
       |> get_clinic_info()
 
     Man.render_template(config()[:id], %{

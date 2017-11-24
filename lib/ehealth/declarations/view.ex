@@ -2,7 +2,8 @@ defmodule EHealth.Declarations.View do
   @moduledoc false
 
   use EHealth.Web, :view
-  alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
+
+  alias EHealth.LegalEntities.LegalEntity
   alias EHealth.Employees.Employee
   alias EHealth.Parties.Party
   alias EHealth.Divisions.Division

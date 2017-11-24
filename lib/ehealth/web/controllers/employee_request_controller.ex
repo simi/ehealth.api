@@ -6,7 +6,7 @@ defmodule EHealth.Web.EmployeeRequestController do
   alias EHealth.EmployeeRequests, as: API
   alias EHealth.API.Mithril
   alias EHealth.EmployeeRequests.EmployeeRequest, as: Request
-  alias EHealth.PRM.LegalEntities
+  alias EHealth.LegalEntities
 
   action_fallback EHealth.Web.FallbackController
 
@@ -71,7 +71,7 @@ defmodule EHealth.Web.EmployeeRequestController do
   end
 
   defp get_legal_entity(%Request{} = request) do
-    LegalEntities.get_legal_entity_by_id(request.data["legal_entity_id"]) || %{}
+    LegalEntities.get_by_id(request.data["legal_entity_id"]) || %{}
   end
 
   defp put_urgent_user_id(conn, %Request{data: data}) do

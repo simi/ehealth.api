@@ -13,8 +13,8 @@ defmodule EHealth.Divisions do
   alias EHealth.API.UAddress
   alias EHealth.Validators.Addresses
   alias EHealth.Divisions.Division
-  alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
-  alias EHealth.PRM.LegalEntities
+  alias EHealth.LegalEntities.LegalEntity
+  alias EHealth.LegalEntities
   alias EHealth.Validators.JsonSchema
   alias EHealth.Validators.JsonObjects
   alias EHealth.Dictionaries
@@ -100,7 +100,7 @@ defmodule EHealth.Divisions do
   end
 
   def prepare_division_data(params, legal_entity_id) do
-    with %LegalEntity{} = legal_entity <- LegalEntities.get_legal_entity_by_id(legal_entity_id),
+    with %LegalEntity{} = legal_entity <- LegalEntities.get_by_id(legal_entity_id),
          :ok <- validate_division_type(legal_entity, params),
          params <- params
                    |> Map.delete("id")

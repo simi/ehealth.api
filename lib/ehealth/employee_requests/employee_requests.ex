@@ -10,8 +10,8 @@ defmodule EHealth.EmployeeRequests do
   alias EHealth.PRMRepo
   alias EHealth.Employees.Employee
   alias EHealth.Divisions.Division
-  alias EHealth.PRM.LegalEntities
-  alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
+  alias EHealth.LegalEntities
+  alias EHealth.LegalEntities.LegalEntity
   alias EHealth.EmployeeRequests.Validator
   alias EHealth.OAuth.API, as: OAuth
   alias EHealth.Employee.UserCreateRequest
@@ -20,8 +20,6 @@ defmodule EHealth.EmployeeRequests do
   alias EHealth.Man.Templates.EmployeeCreatedNotification, as: EmployeeCreatedNotificationTemplate
   alias EHealth.Bamboo.Emails.EmployeeCreatedNotification, as: EmployeeCreatedNotificationEmail
   alias EHealth.API.Mithril
-  alias EHealth.PRM.LegalEntities.Schema, as: LegalEntity
-  alias EHealth.PRM.LegalEntities
   alias EHealth.Employees
   alias EHealth.PRM.BlackListUsers
   alias Ecto.Multi
@@ -71,7 +69,7 @@ defmodule EHealth.EmployeeRequests do
          params <- Map.fetch!(attrs, "employee_request"),
          :ok <- check_owner(params, allowed_owner),
          legal_entity_id <- Map.fetch!(params, "legal_entity_id"),
-         %LegalEntity{} = legal_entity <- LegalEntities.get_legal_entity_by_id(legal_entity_id),
+         %LegalEntity{} = legal_entity <- LegalEntities.get_by_id(legal_entity_id),
          :ok <- validate_type(legal_entity, Map.fetch!(params, "employee_type")),
          :ok <- check_is_user_blacklisted(params)
     do

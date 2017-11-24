@@ -1,4 +1,4 @@
-defmodule EHealth.PRM.LegalEntities.Schema do
+defmodule EHealth.LegalEntities.LegalEntity do
   @moduledoc false
 
   alias EHealth.PRM.MedicalServiceProviders.Schema, as: MedicalServiceProvider
