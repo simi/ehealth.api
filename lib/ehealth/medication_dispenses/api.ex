@@ -4,17 +4,18 @@ defmodule EHealth.MedicationDispense.API do
   import EHealth.Utils.Connection, only: [get_client_id: 1, get_consumer_id: 1]
   import Ecto.Changeset, only: [cast: 3]
   import Ecto.Query
+
   alias EHealth.Divisions
   alias EHealth.Employees
   alias EHealth.LegalEntities
-  alias EHealth.PRM.MedicalPrograms
+  alias EHealth.MedicalPrograms
   alias EHealth.LegalEntities.LegalEntity
   alias EHealth.Employees.Employee
   alias EHealth.Divisions.Division
   alias EHealth.PartyUsers.PartyUser
   alias EHealth.Parties.Party
-  alias EHealth.PRM.Medications.Medication.Schema, as: Medication
-  alias EHealth.PRM.Medications.Program.Schema, as: ProgramMedication
+  alias EHealth.Medications.Medication
+  alias EHealth.Medications.Program, as: ProgramMedication
   alias EHealth.API.OPS
   alias EHealth.MedicationDispenses.Search
   alias EHealth.MedicationDispenses.SearchByMedicationRequest
@@ -24,7 +25,7 @@ defmodule EHealth.MedicationDispense.API do
   alias EHealth.Parties
   alias EHealth.PRMRepo
   alias EHealth.MedicationRequests.API, as: MedicationRequests
-  alias EHealth.PRM.Medications.API, as: MedicationsAPI
+  alias EHealth.Medications
 
   @search_fields ~w(
     id
@@ -423,7 +424,7 @@ defmodule EHealth.MedicationDispense.API do
       |> Enum.into(%{}, &({Map.get(&1, :id), &1}))
     medications =
       reference_ids.medication_ids
-      |> MedicationsAPI.get_by_ids()
+      |> Medications.get_by_ids()
       |> Enum.into(%{}, &({Map.get(&1, :id), &1}))
     %{
       divisions: divisions,
@@ -535,7 +536,7 @@ defmodule EHealth.MedicationDispense.API do
 
   defp load_dispense_medications(%{"details" => details}) do
     Enum.reduce_while(details, {:ok, []}, fn item, {:ok, acc} ->
-      with %Medication{} = medication <- MedicationsAPI.get_medication_by_id(Map.get(item, "medication_id")) do
+      with %Medication{} = medication <- Medications.get_medication_by_id(Map.get(item, "medication_id")) do
         {:cont, {:ok, acc ++ [Map.put(item, "medication", medication)]}}
       else
         _ -> {:halt, {:error, {:internal_error, "Medication not found"}}}

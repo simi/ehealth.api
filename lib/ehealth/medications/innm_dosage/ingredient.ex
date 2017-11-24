@@ -1,12 +1,12 @@
-defmodule EHealth.PRM.Medications.INNMDosage.Ingredient do
+defmodule EHealth.Medications.INNMDosage.Ingredient do
   @moduledoc false
 
   use Ecto.Schema
 
   import Ecto.Changeset, warn: false
 
-  alias EHealth.PRM.Medications.INNM.Schema, as: INNM
-  alias EHealth.PRM.Medications.INNMDosage.Schema, as: INNMDosage
+  alias EHealth.Medications.INNM
+  alias EHealth.Medications.INNMDosage
 
   @fields ~w(
     dosage
@@ -25,7 +25,7 @@ defmodule EHealth.PRM.Medications.INNMDosage.Ingredient do
     timestamps()
   end
 
-  def changeset(%EHealth.PRM.Medications.INNMDosage.Ingredient{} = ingredient, attrs) do
+  def changeset(%EHealth.Medications.INNMDosage.Ingredient{} = ingredient, attrs) do
     attrs = Map.put(attrs, "innm_child_id", attrs["id"])
     ingredient
     |> cast(attrs, @fields)

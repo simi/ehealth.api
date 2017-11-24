@@ -1,8 +1,8 @@
-defmodule EHealth.PRM.Medications.Program.Schema do
+defmodule EHealth.Medications.Program do
   @moduledoc false
   use Ecto.Schema
-  alias EHealth.PRM.Medications.Medication.Schema, as: Medication
-  alias EHealth.PRM.MedicalPrograms.Schema, as: MedicalProgram
+  alias EHealth.Medications.Medication
+  alias EHealth.MedicalPrograms.MedicalProgram
 
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "program_medications" do

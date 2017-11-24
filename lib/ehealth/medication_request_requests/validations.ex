@@ -6,7 +6,7 @@ defmodule EHealth.MedicationRequestRequest.Validations do
   alias EHealth.Validators.JsonSchema
   alias EHealth.Employees.Employee
   alias EHealth.Declarations.API, as: DeclarationsAPI
-  alias EHealth.PRM.Medications.API, as: MedicationsAPI
+  alias EHealth.Medications
 
   def validate_create_schema(params) do
     JsonSchema.validate(:medication_request_request_create, params)
@@ -61,7 +61,7 @@ defmodule EHealth.MedicationRequestRequest.Validations do
   end
 
   def validate_medication_id(medication_id, medication_qty, medical_program_id) do
-    with medications <- MedicationsAPI.get_medication_for_medication_request_request(medication_id, medical_program_id),
+    with medications <- Medications.get_medication_for_medication_request_request(medication_id, medical_program_id),
          {true, :medication} <- {length(medications) > 0, :medication},
          {true, :medication_qty} <- validate_medication_qty(medications, medication_qty)
      do

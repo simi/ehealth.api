@@ -8,15 +8,15 @@ defmodule EHealth.MedicationRequests.API do
   alias EHealth.PartyUsers.PartyUser
   alias EHealth.Employees.Employee
   alias EHealth.LegalEntities.LegalEntity
-  alias EHealth.PRM.MedicalPrograms.Schema, as: MedicalProgram
-  alias EHealth.PRM.Medications.INNMDosage.Schema, as: INNMDosage
-  alias EHealth.PRM.Medications.Program.Schema, as: ProgramMedication
-  alias EHealth.PRM.Medications.API, as: MedicationsAPI
-  alias EHealth.PRM.Medications.Medication.Ingredient
-  alias EHealth.PRM.Medications.INNMDosage.Ingredient, as: INNMDosageIngredient
+  alias EHealth.MedicalPrograms.MedicalProgram
+  alias EHealth.Medications.INNMDosage
+  alias EHealth.Medications.Program, as: ProgramMedication
+  alias EHealth.Medications
+  alias EHealth.Medications.Medication.Ingredient
+  alias EHealth.Medications.INNMDosage.Ingredient, as: INNMDosageIngredient
   alias EHealth.LegalEntities
   alias EHealth.Divisions
-  alias EHealth.PRM.MedicalPrograms
+  alias EHealth.MedicalPrograms
   alias EHealth.API.MPI
   alias EHealth.Validators.JsonSchema
   alias EHealth.MedicationRequests.Search
@@ -213,7 +213,7 @@ defmodule EHealth.MedicationRequests.API do
     with %Division{} = division <- Divisions.get_by_id(medication_request["division_id"]),
          %Employee{} = employee <- Employees.get_by_id(medication_request["employee_id"]),
          %MedicalProgram{} = medical_program <- MedicalPrograms.get_by_id(medication_request["medical_program_id"]),
-         %INNMDosage{} = medication <- MedicationsAPI.get_innm_dosage_by_id(medication_request["medication_id"]),
+         %INNMDosage{} = medication <- Medications.get_innm_dosage_by_id(medication_request["medication_id"]),
          %LegalEntity{} = legal_entity <- LegalEntities.get_by_id(medication_request["legal_entity_id"]),
          {:ok, %{"data" => person}} <- MPI.person(medication_request["person_id"])
     do
@@ -262,7 +262,7 @@ defmodule EHealth.MedicationRequests.API do
 
   def get_check_innm_id(medication_request) do
     medication_id = medication_request["medication_id"]
-    with %INNMDosage{} = medication <- MedicationsAPI.get_innm_dosage_by_id(medication_id),
+    with %INNMDosage{} = medication <- Medications.get_innm_dosage_by_id(medication_id),
          ingredient <- Enum.find(medication.ingredients, &(Map.get(&1, :is_primary)))
     do
       {:ok, ingredient.innm_child_id}

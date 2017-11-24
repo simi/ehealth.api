@@ -1,4 +1,4 @@
-defmodule EHealth.PRM.Medications.Validator do
+defmodule EHealth.Medications.Validator do
   @moduledoc """
   Medications validator.
   """
@@ -7,12 +7,12 @@ defmodule EHealth.PRM.Medications.Validator do
   import Ecto.Query, warn: false
 
   alias EHealth.PRMRepo
-  alias EHealth.PRM.Medications.INNM.Schema, as: INNM
-  alias EHealth.PRM.MedicalPrograms.Schema, as: MedicalProgram
-  alias EHealth.PRM.Medications.Medication.Schema, as: Medication
-  alias EHealth.PRM.Medications.INNMDosage.Schema, as: INNMDosage
-  alias EHealth.PRM.Medications.INNMDosage.Ingredient, as: INNMIngredient
-  alias EHealth.PRM.Medications.Medication.Ingredient, as: MedicationIngredient
+  alias EHealth.Medications.INNM
+  alias EHealth.MedicalPrograms.MedicalProgram
+  alias EHealth.Medications.Medication
+  alias EHealth.Medications.INNMDosage
+  alias EHealth.Medications.INNMDosage.Ingredient, as: INNMIngredient
+  alias EHealth.Medications.Medication.Ingredient, as: MedicationIngredient
 
   @type_innm_dosage INNMDosage.type()
   @type_medication Medication.type()

@@ -1,8 +1,8 @@
-defmodule EHealth.PRM.Medications.INNMDosage.Schema do
+defmodule EHealth.Medications.INNMDosage do
   @moduledoc false
   use Ecto.Schema
-  alias EHealth.PRM.Medications.Medication.Ingredient, as: MedicationIngredient
-  alias EHealth.PRM.Medications.INNMDosage.Ingredient, as: INNMDosageIngredient
+  alias EHealth.Medications.Medication.Ingredient, as: MedicationIngredient
+  alias EHealth.Medications.INNMDosage.Ingredient, as: INNMDosageIngredient
 
   @medication_type "INNM_DOSAGE"
 

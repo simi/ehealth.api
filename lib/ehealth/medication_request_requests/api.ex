@@ -13,20 +13,20 @@ defmodule EHealth.MedicationRequestRequests do
   alias EHealth.PRMRepo
   alias EHealth.API.OPS
   alias EHealth.Employees
-  alias EHealth.PRM.MedicalPrograms
+  alias EHealth.MedicalPrograms
   alias EHealth.MedicationRequestRequest
   alias EHealth.MedicationRequests.SMSSender
   alias EHealth.MedicationRequestRequest.Operation
   alias EHealth.MedicationRequestRequest.Validations
   alias EHealth.MedicationRequestRequest.SignOperation
-  alias EHealth.PRM.Medications.API, as: MedicationsAPI
+  alias EHealth.Medications
   alias EHealth.MedicationRequestRequest.RejectOperation
   alias EHealth.MedicationRequestRequest.PreloadFkOperation
   alias EHealth.MedicationRequestRequest.CreateDataOperation
-  alias EHealth.PRM.MedicalPrograms.Schema, as: MedicalProgram
-  alias EHealth.PRM.Medications.INNMDosage.Schema, as: INNMDosage
-  alias EHealth.PRM.Medications.Program.Schema, as: ProgramMedication
-  alias EHealth.PRM.Medications.INNMDosage.Ingredient, as: INNMDosageIngredient
+  alias EHealth.MedicalPrograms.MedicalProgram
+  alias EHealth.Medications.INNMDosage
+  alias EHealth.Medications.Program, as: ProgramMedication
+  alias EHealth.Medications.INNMDosage.Ingredient, as: INNMDosageIngredient
   alias EHealth.MedicationRequestRequest.HumanReadableNumberGenerator, as: HRNGenerator
 
   @status_new EHealth.MedicationRequestRequest.status(:new)
@@ -190,7 +190,7 @@ defmodule EHealth.MedicationRequestRequests do
   end
 
   def get_check_innm_id(medication_id) do
-    with %INNMDosage{} = medication <- MedicationsAPI.get_innm_dosage_by_id(medication_id),
+    with %INNMDosage{} = medication <- Medications.get_innm_dosage_by_id(medication_id),
          ingredient <- Enum.find(medication.ingredients, &(Map.get(&1, :is_primary)))
     do
       {:ok, ingredient.innm_child_id}

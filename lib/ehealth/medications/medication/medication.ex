@@ -1,7 +1,7 @@
-defmodule EHealth.PRM.Medications.Medication.Schema do
+defmodule EHealth.Medications.Medication do
   @moduledoc false
   use Ecto.Schema
-  alias EHealth.PRM.Medications.Medication.Ingredient
+  alias EHealth.Medications.Medication.Ingredient
 
   @medication_type "BRAND"
 

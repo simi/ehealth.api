@@ -1,4 +1,4 @@
-defmodule EHealth.PRM.Medications.DrugsSearch do
+defmodule EHealth.Medications.DrugsSearch do
   @moduledoc false
 
   use Ecto.Schema

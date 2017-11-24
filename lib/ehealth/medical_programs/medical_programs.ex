@@ -1,12 +1,12 @@
-defmodule EHealth.PRM.MedicalPrograms do
-  @moduledoc false
+defmodule EHealth.MedicalPrograms do
+@moduledoc false
 
   use EHealth.Search, EHealth.PRMRepo
 
   alias EHealth.PRMRepo
-  alias EHealth.PRM.Medications.API, as: MedicationsAPI
-  alias EHealth.PRM.MedicalPrograms.Search
-  alias EHealth.PRM.MedicalPrograms.Schema, as: MedicalProgram
+  alias EHealth.Medications
+  alias EHealth.MedicalPrograms.Search
+  alias EHealth.MedicalPrograms.MedicalProgram
 
   @fields_required ~w(name)a
   @fields_optional ~w(is_active)a
@@ -51,7 +51,7 @@ defmodule EHealth.PRM.MedicalPrograms do
 
   def deactivate(updated_by, %MedicalProgram{id: id} = medical_program) do
     err_msg = "This program has active participants. Only medical programs without participants can be deactivated"
-    case MedicationsAPI.count_active_program_medications_by(medical_program_id: id) do
+    case Medications.count_active_program_medications_by(medical_program_id: id) do
       0 ->
         medical_program
         |> changeset(%{is_active: false, updated_by: updated_by})

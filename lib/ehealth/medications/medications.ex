@@ -1,4 +1,4 @@
-defmodule EHealth.PRM.Medications.API do
+defmodule EHealth.Medications do
   @moduledoc """
   The Medications context.
   """
@@ -10,19 +10,19 @@ defmodule EHealth.PRM.Medications.API do
   import EHealth.Utils.Connection, only: [get_consumer_id: 1]
 
   alias EHealth.PRMRepo
-  alias EHealth.PRM.Medications.INNM.Schema, as: INNM
-  alias EHealth.PRM.Medications.INNM.Search, as: INNMSearch
-  alias EHealth.PRM.Medications.INNMDosage.Schema, as: INNMDosage
-  alias EHealth.PRM.Medications.INNMDosage.Search, as: INNMDosageSearch
-  alias EHealth.PRM.Medications.Medication.Ingredient, as: MedicationIngredient
-  alias EHealth.PRM.Medications.Medication.Schema, as: Medication
-  alias EHealth.PRM.Medications.Medication.Search, as: MedicationSearch
-  alias EHealth.PRM.Medications.Program.Schema, as: ProgramMedication
-  alias EHealth.PRM.Medications.Program.Search, as: ProgramMedicationSearch
-  alias EHealth.PRM.MedicalPrograms.Schema, as: MedicalProgram
-  alias EHealth.PRM.Medications.DrugsSearch
+  alias EHealth.Medications.INNM
+  alias EHealth.Medications.INNM.Search, as: INNMSearch
+  alias EHealth.Medications.INNMDosage
+  alias EHealth.Medications.INNMDosage.Search, as: INNMDosageSearch
+  alias EHealth.Medications.Medication.Ingredient, as: MedicationIngredient
+  alias EHealth.Medications.Medication
+  alias EHealth.Medications.Medication.Search, as: MedicationSearch
+  alias EHealth.Medications.Program, as: ProgramMedication
+  alias EHealth.Medications.Program.Search, as: ProgramMedicationSearch
+  alias EHealth.MedicalPrograms.MedicalProgram
+  alias EHealth.Medications.DrugsSearch
   alias EHealth.Validators.JsonSchema
-  alias EHealth.PRM.Medications.Validator
+  alias EHealth.Medications.Validator
 
   @type_innm_dosage INNMDosage.type()
   @type_medication Medication.type()

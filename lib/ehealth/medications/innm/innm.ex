@@ -1,7 +1,8 @@
-defmodule EHealth.PRM.Medications.INNM.Schema do
+defmodule EHealth.Medications.INNM do
   @moduledoc false
   use Ecto.Schema
-  alias EHealth.PRM.Medications.INNMDosage.Ingredient
+
+  alias EHealth.Medications.INNMDosage.Ingredient
 
   @derive {Poison.Encoder, except: [:__meta__, :ingredients]}
 
