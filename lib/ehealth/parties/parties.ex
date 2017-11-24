@@ -6,8 +6,8 @@ defmodule EHealth.Parties do
   import Ecto.{Query, Changeset}, warn: false
 
   alias EHealth.PRMRepo
-  alias EHealth.PRM.Meta.Phone
-  alias EHealth.PRM.Meta.Document
+  alias EHealth.Parties.Phone
+  alias EHealth.Parties.Document
   alias EHealth.Parties.Party
   alias EHealth.Parties.Search
 

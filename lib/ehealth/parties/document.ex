@@ -1,4 +1,4 @@
-defmodule EHealth.PRM.Meta.Document do
+defmodule EHealth.Parties.Document do
   @moduledoc false
 
   use Ecto.Schema
@@ -13,13 +13,12 @@ defmodule EHealth.PRM.Meta.Document do
   @derive {Poison.Encoder, except: [:__meta__]}
 
   @primary_key false
-
   schema "documents" do
     field :type, :string
     field :number, :string
   end
 
-  def changeset(%EHealth.PRM.Meta.Document{} = doc, attrs) do
+  def changeset(%__MODULE__{} = doc, attrs) do
     doc
     |> cast(attrs, @fields)
     |> validate_required(@fields)

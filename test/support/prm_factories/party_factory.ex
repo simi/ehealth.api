@@ -9,7 +9,7 @@ defmodule EHealth.PRMFactories.PartyFactory do
         %EHealth.Parties.Party{
           birth_date: ~D[1991-08-19],
           documents: [
-            %EHealth.PRM.Meta.Document{
+            %EHealth.Parties.Document{
               type: "NATIONAL_ID",
               number: "AA000000"
             }
@@ -18,7 +18,7 @@ defmodule EHealth.PRMFactories.PartyFactory do
           gender: "some gender",
           last_name: "some last_name",
           phones: [
-            %EHealth.PRM.Meta.Phone{
+            %EHealth.Parties.Phone{
               type: "MOBILE",
               number: "+380972526080"
             }

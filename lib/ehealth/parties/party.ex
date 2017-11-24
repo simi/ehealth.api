@@ -15,8 +15,8 @@ defmodule EHealth.Parties.Party do
     field :inserted_by, Ecto.UUID
     field :updated_by, Ecto.UUID
 
-    embeds_many :phones, EHealth.PRM.Meta.Phone, on_replace: :delete
-    embeds_many :documents, EHealth.PRM.Meta.Document, on_replace: :delete
+    embeds_many :phones, EHealth.Parties.Phone, on_replace: :delete
+    embeds_many :documents, EHealth.Parties.Document, on_replace: :delete
 
     has_many :users, EHealth.PartyUsers.PartyUser, foreign_key: :party_id
 
