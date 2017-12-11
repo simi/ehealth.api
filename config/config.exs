@@ -209,8 +209,7 @@ config :ehealth, EHealth.Validators.BirthDate,
 config :logger, :console,
   format: "$message\n",
   handle_otp_reports: true,
-  level: :info,
-  truncate: :infinity
+  level: :info
 
 # Configures declaration request terminator
 config :ehealth, EHealth.DeclarationRequest.Terminator,
