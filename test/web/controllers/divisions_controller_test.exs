@@ -69,6 +69,33 @@ defmodule EHealth.Web.DivisionsControllerTest do
 
       assert 1 == length(resp["data"])
     end
+
+    test "search divisions by location", %{conn: conn} do
+      legal_entity = insert(:prm, :legal_entity)
+      conn = put_client_id_header(conn, legal_entity.id)
+
+      location1 = %Geo.Point{coordinates: {50.469034, 30.512653}}
+      location2 = %Geo.Point{coordinates: {50.468802, 30.515710}}
+      location3 = %Geo.Point{coordinates: {50.466036, 30.520335}}
+      division1 = insert(:prm, :division, legal_entity: legal_entity, location: location1)
+      division2 = insert(:prm, :division, legal_entity: legal_entity, location: location2)
+      insert(:prm, :division, legal_entity: legal_entity, location: location3)
+
+      params = %{
+        "lefttop_latitude" => 50.471165,
+        "lefttop_longitude" => 30.509370,
+        "rightbottom_latitude" => 50.466781,
+        "rightbottom_longitude" => 30.517845,
+      }
+
+      conn1 = get conn, division_path(conn, :index), params
+      resp = json_response(conn1, 200)["data"]
+
+      assert 2 == length(resp)
+      Enum.each(resp, fn %{"id" => id} ->
+        assert id in [division1.id, division2.id]
+      end)
+    end
   end
 
   test "get division by id", %{conn: conn} do

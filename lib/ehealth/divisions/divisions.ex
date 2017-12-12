@@ -21,12 +21,11 @@ defmodule EHealth.Divisions do
   alias Ecto.Multi
   alias EctoTrail.Changelog
 
-  @search_fields ~w(
-    ids
-    name
-    legal_entity_id
-    type
-    status
+  @fields_location ~w(
+    lefttop_latitude
+    lefttop_longitude
+    rightbottom_latitude
+    rightbottom_longitude
   )a
 
   @fields_optional ~w(
@@ -214,7 +213,22 @@ defmodule EHealth.Divisions do
     |> foreign_key_constraint(:legal_entity_id)
   end
   defp changeset(%Search{} = division, attrs) do
-    cast(division, attrs, @search_fields)
+    division
+    |> cast(attrs, Search.__schema__(:fields))
+    |> validate_location_fields()
+  end
+
+  defp validate_location_fields(changeset) do
+    case locations_field_passed?(changeset.changes) do
+      true -> validate_required(changeset, @fields_location)
+      false -> changeset
+    end
+  end
+
+  defp locations_field_passed?(changes) do
+    Enum.reduce_while(changes, false, fn {k, _}, _acc ->
+      if k in @fields_location, do: {:halt, true}, else: {:cont, false}
+    end)
   end
 
   defp mountain_group_changeset(attrs) do
@@ -225,25 +239,44 @@ defmodule EHealth.Divisions do
     |> validate_required(required_params)
   end
 
-  def get_search_query(Division = entity, %{ids: _} = changes) do
-    super(entity, convert_comma_params_to_where_in_clause(changes, :ids, :id))
+  def geom(a, b, c, d) do
+    #    from d in Division, select: st_make_envelope(d.location, ^a, ^b, ^c, ^d)
+    q = from d in Division, where: fragment("location && ST_MakeEnvelope(?, ?, ?, ?, 4326)", ^a, ^b, ^c, ^d)
+    PRMRepo.all(q)
   end
+
   def get_search_query(Division = division, changes) do
     params =
       changes
-      |> Map.drop([:name])
+      |> Map.drop([:name] ++ @fields_location) # filter search fields
+      |> prepare_ids_param()
       |> Map.to_list()
 
     division
     |> select([d], d)
     |> query_name(Map.get(changes, :name))
+    |> query_locations(changes)
     |> where(^params)
   end
 
-  def query_name(query, nil), do: query
-  def query_name(query, name) do
-    query |> where([d], ilike(d.name, ^"%#{name}%"))
+  defp query_name(query, nil), do: query
+  defp query_name(query, name), do: where(query, [d], ilike(d.name, ^"%#{name}%"))
+
+  defp query_locations(
+         query,
+         %{
+           lefttop_latitude: tlat,
+           lefttop_longitude: tlong,
+           rightbottom_latitude: blat,
+           rightbottom_longitude: blong
+         }
+       ) do
+    where(query, fragment("location && ST_MakeEnvelope(?, ?, ?, ?, 4326)", ^tlat, ^tlong, ^blat, ^blong))
   end
+  defp query_locations(query, _), do: query
+
+  defp prepare_ids_param(%{ids: _} = params), do: convert_comma_params_to_where_in_clause(params, :ids, :id)
+  defp prepare_ids_param(params), do: params
 
   defp convert_comma_params_to_where_in_clause(changes, param_name, db_field) do
     changes
